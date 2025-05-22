@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  </head>
+  <body>
+    
+    <div class="navbar">
+
+      <h1 id="header">Orders</h1> 
+      <button class="logout-button" id="logoutButton" >Logout</button>
+  
+      <a href="costumer.html" class="homeHyperlink">
+        <i class="bi bi-house-fill"></i>
+      </a>
+
+
+      <div class="searchBar">
+        <input type="number" id="idSearch" placeholder="Enter id of the order you want to find">
+        <button class="search-button">
+          <i class="bi bi-search" style="color: black; margin: 0px; font-size: 18px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="allOrders"></div>
+
+    
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div class="title" id="ModalHeader">Example Modal</div>
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+      <div class="modal-body" id="ModalBody">
+        This should have been edited
+      </div>
+    </div>
+
+    <div class="modal" id="alertModal">
+      <div class="modal-header" id="alertModalHeader" >
+        <div class="alertSign">
+          <i class="bi bi-exclamation-triangle"></i>          
+          <div>Alert</div>
+        </div>  
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+      <div class="modal-body" id="alertModalBody" >
+        This should have been edited
+      </div>
+    </div>
+
+    <div id="overlay"></div>
+
+    <script src="login.js"></script>
+    <script src="app-orders.js"></script>
+
+  </body>
+</html>
+

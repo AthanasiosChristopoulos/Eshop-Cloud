@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  </head>
+  <body>
+    
+    <div class="navbar">
+
+      <h1 id="header">Purchase Products</h1>   
+
+      <button class="logout-button" id="logoutButton" >Logout</button>
+
+      <button class="cart" id="cart1">
+          <i class="bi bi-cart-check-fill"></i>
+          <div id="cartAmount" class="cartAmount">0</div>
+      </button>
+
+      <button data-modal-target="#modal" id="homeButton" class="homeHyperlink">
+        <i class="bi bi-house-fill"></i>
+      </button>
+
+
+      <div class="searchBar">
+        <input  id="idSearch" placeholder="Enter id or title of the product you want to find"><br><br>
+        <button class="search-button">
+          <i class="bi bi-search" style="color: black; margin: 0px; font-size: 18px;"></i>
+        </button>
+
+      </div>
+
+    </div>
+
+    <div id="allProducts"></div>
+    
+
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div class="title" id="ModalHeader">Example Modal</div>
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+      <div class="modal-body" id="ModalBody">
+        This should have been edited
+      </div>
+    </div>
+
+    <div class="modal" id="alertModal">
+      <div class="modal-header" id="alertModalHeader" >
+        <div class="alertSign">
+          <i class="bi bi-exclamation-triangle"></i>          
+          <div>Alert</div>
+        </div>  
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+      <div class="modal-body" id="alertModalBody" >
+        This should have been edited
+      </div>
+    </div>
+
+
+    <!-- <div class="modal" id="bad_user_role">
+      <div class="modal-header" id="alertModalHeader" >
+        <div class="alertSign">
+          <i class="bi bi-exclamation-triangle"></i>          
+          <div>Wrong Uder_Role</div>
+        </div>  
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+      <div class="modal-body" id="alertModalBody" >
+        This should have been edited
+      </div>
+    </div> -->
+
+    <div id="overlay"></div>
+
+    <script src="login.js"></script>
+    <script src="app-purchase1.js"></script>
+
+  </body>
+</html>
+
