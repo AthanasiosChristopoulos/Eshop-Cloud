@@ -81,8 +81,8 @@ async function exchangeCodeForToken(authCode) {
             if (decodedToken && decodedToken.realm_access && decodedToken.user_role === "seller") { //&& decodedToken.realm_access.roles.includes("seller")
                 window.location.href = "http://127.0.0.1:5500/edit.html";
 
-            } else if (decodedToken && decodedToken.realm_access && decodedToken.user_role === "costumer") {
-                window.location.href = "http://127.0.0.1:5500/costumer.html";
+            } else if (decodedToken && decodedToken.realm_access && decodedToken.user_role === "customer") {
+                window.location.href = "http://127.0.0.1:5500/customer.html";
 
             } else{
                 console.log("User is not authorized or doesnt have a role.");
@@ -222,9 +222,9 @@ if (loginButton) {
 //             } else if (
 //                 decodedToken &&
 //                 decodedToken.realm_access &&
-//                 decodedToken.user_role === "costumer"
+//                 decodedToken.user_role === "customer"
 //             ) {
-//                 window.location.href = "http://127.0.0.1:5500/costumer.html";
+//                 window.location.href = "http://127.0.0.1:5500/customer.html";
 //             } else {
 //                 console.log("User is not authorized or doesn't have a role.");
 //             }

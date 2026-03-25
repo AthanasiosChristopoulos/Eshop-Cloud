@@ -32,7 +32,7 @@ const allOrdersDiv = document.getElementById("allOrders");
 document.addEventListener("DOMContentLoaded", async () => {
 
   try {
-      if(JSON.parse(token).user_role != 'costumer'){
+      if(JSON.parse(token).user_role != 'customer'){
         
         openModal(modal);
 

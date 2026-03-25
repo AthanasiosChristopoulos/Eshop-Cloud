@@ -49,7 +49,7 @@ let basket = JSON.parse(localStorage.getItem("data")) || [];
 document.addEventListener("DOMContentLoaded", async () => {
 
   try {
-      if(JSON.parse(token).user_role != 'costumer'){
+      if(JSON.parse(token).user_role != 'customer'){
         
         openModal(modal);
 
@@ -293,7 +293,7 @@ homeButton.addEventListener('click', async () => {
     // localStorage.clear();
     localStorage.removeItem("data");
 
-    window.location.href = 'costumer.html';
+    window.location.href = 'customer.html';
 
   }
   else{
@@ -328,7 +328,7 @@ let initializeYesButtonEventListener = (modal, button) => {
     // localStorage.clear();
     localStorage.removeItem("data");
 
-    window.location.href = 'costumer.html';
+    window.location.href = 'customer.html';
 
   });
 };
