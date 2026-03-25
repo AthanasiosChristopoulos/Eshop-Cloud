@@ -39,7 +39,7 @@ data2/
 *.dump
 
 # optional: ignore local secrets or exported realm files if regenerated locally
-# keycloak-realm-data3/
+keycloak-realm-data3/
 
 # optional: ignore uploaded/generated frontend assets
 # frontend/images/generated/
