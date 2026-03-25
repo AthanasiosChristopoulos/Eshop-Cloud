@@ -1,0 +1,45 @@
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# build / temp / cache
+dist/
+build/
+coverage/
+.tmp/
+temp/
+.cache/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Docker / local runtime data
+data/
+data2/
+*.pid
+
+# Keycloak / database dump backups
+*.sql.bak
+*.dump
+
+# optional: ignore local secrets or exported realm files if regenerated locally
+# keycloak-realm-data3/
+
+# optional: ignore uploaded/generated frontend assets
+# frontend/images/generated/
