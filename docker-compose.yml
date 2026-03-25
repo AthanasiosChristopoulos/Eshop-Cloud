@@ -137,19 +137,18 @@ services:
 
 # ======================================================================================================
 # ======================================================================================================
-
   order_db:
-    image: postgres
+    image: postgres:18  # That matches the newer Postgres 18+ layout the image expects.
     container_name: order_db
     restart: always
     ports:
-      - ":5432"
+      - "5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 5409
       POSTGRES_DB: orders
     volumes:
-      - ./data/order_db_data:/var/lib/postgresql/data
+      - ./data/order_db_data:/var/lib/postgresql  # if using 18, change mount target to /var/lib/postgresql
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
@@ -157,17 +156,17 @@ services:
       retries: 5
 
   product_db:
-    image: postgres
+    image: postgres:18
     container_name: product_db
     restart: always
     ports:
-      - ":5432"
+      - "5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 5409
       POSTGRES_DB: products
     volumes:
-      - ./data/product_db_data:/var/lib/postgresql/data
+      - ./data/product_db_data:/var/lib/postgresql
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
@@ -214,6 +213,7 @@ services:
       DB_NAME: products
     volumes:
       - ./:/app
+      
 # ======================================================================================================
 # ======================================================================================================
 
