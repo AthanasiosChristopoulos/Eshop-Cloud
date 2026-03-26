@@ -11,8 +11,15 @@ Generally the frontend deals with this, so reviewing the frontend is a good idea
         Client ID: frontend-client
         Next
         Next
-        http://127.0.0.1:5500/*
-        http://localhost:5500/*
+        Set ... no "/" values in the end they are dangerous:
+        | Setting | Value |
+        |---|---|
+        | **Root URL** | `http://127.0.0.1:5500` |
+        | **Home URL** | `http://127.0.0.1:5500` |
+        | **Valid redirect URIs** | `http://127.0.0.1:5500/*`<br>`http://localhost:5500/*` |
+        | **Valid post logout redirect URIs** | `http://127.0.0.1:5500` |
+        | **Web origins** | `http://localhost:5500`<br>`http://127.0.0.1:5500` |
+        | **Admin URL** | *(empty)* |
         Client authentication = Off
 
     - 3) create roles: Realm roles -> Create Role 
@@ -45,5 +52,5 @@ Generally the frontend deals with this, so reviewing the frontend is a good idea
 3) Access the frontend in http://localhost:5500 
 
 
-3) docker compose down
-4) Use docker app to find, frontend port on localhost
+4) Login for the users you defined
+

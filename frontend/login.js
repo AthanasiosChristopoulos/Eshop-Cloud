@@ -130,11 +130,14 @@ async function logout() {
     
 // }
 
-document.getElementById("logoutButton").addEventListener("click", function() {
-    console.log("Logging out...");
-    logout();
-  });
+const logoutButton = document.getElementById("logoutButton");
 
+if (logoutButton) {
+    logoutButton.addEventListener("click", function () {
+        console.log("Logging out...");
+        logout();
+    });
+}
 
 
 
