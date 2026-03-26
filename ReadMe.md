@@ -1,8 +1,11 @@
 How to run:
 
+0) npm install # npm looks in the current folder for: package.json and package-lock.json, and then installs the dependencies
+
 1) docker compose up
 
-2) http://localhost:8080 => Access keycloack
+2) http://localhost:8080 => Access keycloack as the administrator
+
 Generally the frontend deals with this, so reviewing the frontend is a good idea to figure out how to configure keycloack
     - 1) create new realm "eshop"
     - 2) create client:
@@ -55,12 +58,11 @@ Generally the frontend deals with this, so reviewing the frontend is a good idea
         - find the username 
         - set preffered_username to username
 
-3) Access the frontend in http://localhost:5500 
-
+3) Access the frontend in http://localhost:5500 , check kafka in http://localhost:9021/
 
 4) Login for the users you defined
 
-5) docker compose down
+5) docker compose down (this doesnt delete the data, since it is in volumes)
 
 ## ====================================================================================
 ## Database running in docker interaction
