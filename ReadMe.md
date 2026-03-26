@@ -58,7 +58,7 @@ Generally the frontend deals with this, so reviewing the frontend is a good idea
         - find the username 
         - set preffered_username to username
 
-3) Access the frontend in http://localhost:5500 , check kafka in http://localhost:9021/
+3) Access the frontend in http://localhost:5500, check kafka in http://localhost:9021/
 
 4) Login for the users you defined
 
