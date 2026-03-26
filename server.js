@@ -18,6 +18,9 @@ appOrders.use(express.json());
 
 const productPort = config.PORT_products;
 const orderPort = config.PORT_orders;
+
+// Products: ================================================================================
+
 appProducts.get('/products/allUsers', productService.getAllProducts);
 
 appProducts.get('/products/allUsers/:param', async (req, res) => {
@@ -54,10 +57,14 @@ appProducts.post('/products/:username', productService.addProduct);
 appProducts.delete('/products/:username/:id', productService.deleteProduct);
 appProducts.put('/products/:username/:id', productService.updateProduct);
 
+// Orders: ================================================================================
+
 appOrders.get('/orders/:username', orderService.getOrders);
 appOrders.get('/orders/:username/:id', orderService.getOrderById);
 appOrders.post('/orders/:username', orderService.addOrder);
 appOrders.delete('/orders/:username/:id', orderService.deleteOrder);
+
+// ========================================================================================
 
 appProducts.listen(productPort, () => console.log(`Products app listening on port ${productPort}`));
 appOrders.listen(orderPort, () => console.log(`Orders app listening on port ${orderPort}`));

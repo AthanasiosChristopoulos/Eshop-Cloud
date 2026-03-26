@@ -49,8 +49,24 @@ Generally the frontend deals with this, so reviewing the frontend is a good idea
         - make a new user
         - go into User -> user you just selected -> Credentials -> Set Password
 
+    - 7) Clients → frontend-client → Client scopes 
+        - profile
+        - Mappers
+        - find the username 
+        - set preffered_username to username
+
 3) Access the frontend in http://localhost:5500 
 
 
 4) Login for the users you defined
 
+5) docker compose down
+
+## ====================================================================================
+## Database running in docker interaction
+
+```bash
+# Access database through docker
+docker exec -it product_db psql -U postgres -d products
+
+```
