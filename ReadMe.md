@@ -1,74 +1,335 @@
-How to run:
+# E-Shop Local Development Setup
 
-0) npm install # npm looks in the current folder for: package.json and package-lock.json, and then installs the dependencies
+This project runs with Docker, uses Keycloak for authentication, Kafka for messaging, and a frontend running locally.
 
-1) docker compose up
+---
 
-2) http://localhost:8080 => Access keycloack as the administrator
+## 0) Install Dependencies
 
-Generally the frontend deals with this, so reviewing the frontend is a good idea to figure out how to configure keycloack
-    - 1) create new realm "eshop"
-    - 2) create client:
-        Clients → Create client
-        Client type: OpenID Connect
-        Client ID: frontend-client
-        Next
-        Next
-        Set ... no "/" values in the end they are dangerous:
-        | Setting | Value |
-        |---|---|
-        | **Root URL** | `http://127.0.0.1:5500` |
-        | **Home URL** | `http://127.0.0.1:5500` |
-        | **Valid redirect URIs** | `http://127.0.0.1:5500/*`<br>`http://localhost:5500/*` |
-        | **Valid post logout redirect URIs** | `http://127.0.0.1:5500` |
-        | **Web origins** | `http://localhost:5500`<br>`http://127.0.0.1:5500` |
-        | **Admin URL** | *(empty)* |
-        Client authentication = Off
-
-    - 3) create roles: Realm roles -> Create Role 
-        seller
-        customer
-
-    - 4) Realm settings → User profile:
-        - Create Attribute => user_role
-        - user_role
-
-    - 5) Clients → frontend-client → Client scopes (or just go directly to client scopes):
-    “Take the user attribute user_role from the user profile, and include it in the token as a claim also called user_role.”
-    That is why your frontend can later do:
-        decodedToken.user_role
-    The frontend needs this attribute to have actuall auth functionality and be included in the tokens
-
-        - Select your frontend
-        - Mappers
-        - Configure a new mapper
-        - User Attribute
-            Mapper type: User Attribute (already)
-            Name: user_role
-            User Attribute: user_role
-            Token Claim Name: user_role
-
-    - 6) Users -> Create Users
-        - make a new user
-        - go into User -> user you just selected -> Credentials -> Set Password
-
-    - 7) Clients → frontend-client → Client scopes 
-        - profile
-        - Mappers
-        - find the username 
-        - set preffered_username to username
-
-3) Access the frontend in http://localhost:5500, check kafka in http://localhost:9021/
-
-4) Login for the users you defined
-
-5) docker compose down (this doesnt delete the data, since it is in volumes)
-
-## ====================================================================================
-## Database running in docker interaction
+Before starting anything, install the frontend dependencies:
 
 ```bash
-# Access database through docker
-docker exec -it product_db psql -U postgres -d products
-
+npm install
 ```
+
+What this does:
+- Looks for `package.json`
+- Looks for `package-lock.json`
+- Installs the required dependencies into `node_modules`
+
+---
+
+## 1) Start the Project
+
+Run everything with Docker:
+
+```bash
+docker compose up
+```
+
+This starts the backend services and supporting infrastructure.
+
+---
+
+## 2) Configure Keycloak
+
+Open Keycloak Admin here:
+
+```text
+http://localhost:8080
+```
+
+> The frontend usually expects a specific Keycloak setup, so if something feels unclear, checking the frontend code is a good idea.
+
+---
+
+# Keycloak Configuration
+
+## Step 1 — Create Realm
+
+Create a new realm named:
+
+```text
+eshop
+```
+
+---
+
+## Step 2 — Create Client
+
+Go to:
+
+```text
+Clients → Create client
+```
+
+Use these values:
+
+```text
+Client type: OpenID Connect
+Client ID: frontend-client
+```
+
+Then click:
+
+```text
+Next
+Next
+```
+
+### Client Settings
+
+> Important: avoid adding trailing `/` to URL fields where it does not belong.
+
+Use the following values:
+
+```text
+Root URL: http://127.0.0.1:5500
+Home URL: http://127.0.0.1:5500
+
+Valid redirect URIs:
+http://127.0.0.1:5500/*
+http://localhost:5500/*
+
+Valid post logout redirect URIs:
+http://127.0.0.1:5500
+
+Web origins:
+http://localhost:5500
+http://127.0.0.1:5500
+
+Admin URL:
+(leave empty)
+
+Client authentication:
+Off
+```
+
+---
+
+## Step 3 — Create Roles
+
+Go to:
+
+```text
+Realm roles → Create role
+```
+
+Create these two roles:
+
+```text
+seller
+customer
+```
+
+---
+
+## Step 4 — Add Custom User Attribute
+
+Go to:
+
+```text
+Realm settings → User profile
+```
+
+Create a new attribute called:
+
+```text
+user_role
+```
+
+This will store the role for each user.
+
+---
+
+## Step 5 — Add `user_role` to the Token
+
+The frontend expects the user role to be available in the token like this:
+
+```js
+decodedToken.user_role
+```
+
+To make that work, you need to map the custom user attribute into the token.
+
+Go to:
+
+```text
+Clients → frontend-client → Client scopes
+```
+
+Then:
+
+```text
+Mappers → Configure a new mapper
+```
+
+Choose:
+
+```text
+User Attribute
+```
+
+Use the following values:
+
+```text
+Mapper type: User Attribute
+Name: user_role
+User Attribute: user_role
+Token Claim Name: user_role
+```
+
+### What this does
+
+It tells Keycloak:
+
+```text
+Take the user attribute "user_role" from the user profile
+and include it in the token as a claim called "user_role".
+```
+
+That way the frontend can read it directly from the decoded token.
+
+---
+
+## Step 6 — Create Users
+
+Go to:
+
+```text
+Users → Create user
+```
+
+Create one or more users.
+
+Then for each user:
+
+```text
+User → [select the user] → Credentials → Set Password
+```
+
+Make sure the user also has the correct `user_role` value if your frontend depends on it.
+
+Example:
+
+```text
+seller
+```
+
+or
+
+```text
+customer
+```
+
+---
+
+## Step 7 — Fix `preferred_username`
+
+Go to:
+
+```text
+Clients → frontend-client → Client scopes
+```
+
+Then open:
+
+```text
+profile
+```
+
+Then:
+
+```text
+Mappers
+```
+
+Find:
+
+```text
+username
+```
+
+Set:
+
+```text
+preferred_username = username
+```
+
+This helps ensure the frontend receives the expected username field.
+
+---
+
+## 3) Open the Frontend and Kafka
+
+Once Keycloak is configured, open:
+
+### Frontend
+
+```text
+http://localhost:5500
+```
+
+### Kafka UI
+
+```text
+http://localhost:9021
+```
+
+---
+
+## 4) Log In
+
+Use the users you created in Keycloak to log into the frontend.
+
+---
+
+## 5) Stop Everything
+
+To stop the services:
+
+```bash
+docker compose down
+```
+
+> This does **not** delete your data if it is stored in Docker volumes.
+
+---
+
+# Database Access (PostgreSQL in Docker)
+
+If you want to access the products database directly from Docker:
+
+```bash
+docker exec -it product_db psql -U postgres -d products
+```
+
+# Troubleshooting
+
+## Login works but role-based frontend behavior does not
+
+Check:
+
+```text
+- user_role exists on the user
+- user_role is included in the token
+- the frontend is reading decodedToken.user_role
+```
+
+## Redirect issues
+
+Double-check:
+
+```text
+- Root URL
+- Home URL
+- Valid redirect URIs
+- Valid post logout redirect URIs
+- Web origins
+```
+
+## Data still exists after restart
+
+That is normal if Docker volumes are being used.
+
+---
