@@ -8,8 +8,8 @@ function redirect_to_login(){
         response_type: "code",
         client_id: "frontend-client",
         redirect_uri: "http://127.0.0.1:5500"
-        
     });
+    
     window.location.href = `${keycloakUrl}/?${params.toString()}`;
 }
 
@@ -112,8 +112,6 @@ async function logout() {
 
 //         const logoutUrl = "http://127.0.0.1:8080/realms/eshop/protocol/openid-connect/logout";
     
-
-    
 //         try {
 //             const response = await fetch(logoutUrl);
     
@@ -138,8 +136,6 @@ if (logoutButton) {
         logout();
     });
 }
-
-
 
 const loginButton = document.getElementById("loginButton");
 
