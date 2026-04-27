@@ -171,6 +171,7 @@ let addProduct = () => {
   initializeNoButtonEventListener(modal, quitButton);
 }
 
+// THEORY: To the question, how to ask for the user to fill out the entire form
 
 let initializeSumbitButtonEventListener = (submitButton) => {
 
