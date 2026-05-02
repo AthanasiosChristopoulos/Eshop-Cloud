@@ -26,7 +26,7 @@ if (token) {
   url = `http://127.0.0.1:5000/products/${username}`;
   url_orders = `http://127.0.0.1:5001/orders/${username}`;
 } else{
-console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+    console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 }
 console.log(url);
 console.log(url_orders);
