@@ -22,13 +22,11 @@ const orderPort = config.PORT_orders;
 // Products: ================================================================================
 
 appProducts.get('/products/allUsers', productService.getAllProducts);
-
 appProducts.get('/products/allUsers/:param', async (req, res) => {
-    
-    const param = req.params.param;
 
+    const param = req.params.param;
     const id = parseInt(param);
-    
+
     if (!isNaN(id) && Number.isInteger(id)) {
         return productService.getAllProductsById(req, res);
     } else {
@@ -37,13 +35,9 @@ appProducts.get('/products/allUsers/:param', async (req, res) => {
 });
 
 appProducts.put('/products/allUsers/:id', productService.updateAllProduct);
-
 appProducts.get('/products/:username', productService.getProducts);
-
 appProducts.get('/products/:username/:param', async (req, res) => {
-    
     const param = req.params.param;
-
     const id = parseInt(param);
     
     if (!isNaN(id) && Number.isInteger(id)) {

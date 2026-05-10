@@ -1,9 +1,9 @@
+
 const pool = require('./dataBaseOrders'); 
 const kafka = require('./kafka');
 const  kafka_product  = require('../product_service/kafka');
 
-//=====================================================================================
-//=====================================================================================
+// =====================================================================================
 // GET an order
 
 const getOrders = async (req, res) => {
@@ -19,8 +19,7 @@ const getOrders = async (req, res) => {
     }
 };
 
-//=====================================================================================
-//=====================================================================================
+// =====================================================================================
 // GET an order by id
 
 const getOrderById = async (req, res) => {
@@ -44,49 +43,11 @@ const getOrderById = async (req, res) => {
     }
 };
 
-//=====================================================================================
-//=====================================================================================
+// =====================================================================================
 // Add an order
 
-// const addOrder = async (req, res) => {
-//     const { products, total_price, status } = req.body;
-//     const username = req.params.username;  
-
-//     if (!products || !total_price || !status) {
-//         return res.status(400).json({ error: "Missing required fields" });
-//     }
-
-//     try {
-//         const query = 'INSERT INTO orders (products, total_price, status, username) VALUES ($1::json, $2, $3, $4) RETURNING *';
-//         const values = [JSON.stringify(products), total_price, status, username]; 
-
-//         pool.query(query, values, (error, results) => {
-//             if (error) {
-//                 console.error("Error creating order:", error.message);
-//                 return res.status(500).json({ error: "Error creating order" });
-//             } else {
-//                 return res.status(201).json({ message: "Order created successfully" });
-//             }
-//         });
-
-//         //send to kafka
-//         const msg = {
-//             id: results[0].insertId,
-//             products: products
-//         }
-
-//         await kafka.kafkaProducer(msg)
-
-
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send("Error creating order");
-//     }
-// };
-
-
 const addOrder = async (req, res) => {
-
+    
     const { products, total_price, status } = req.body;
     const username = req.params.username;  
 
@@ -139,8 +100,7 @@ const addOrder = async (req, res) => {
     }
 };
 
-//=====================================================================================
-//=====================================================================================
+// =====================================================================================
 // Delete an order
 
 const deleteOrder = async (req, res) => {
@@ -155,8 +115,8 @@ const deleteOrder = async (req, res) => {
         res.status(500).send("Error deleting order");
     }
 };
-//=====================================================================================
-//=====================================================================================
+
+// =====================================================================================
 // Update Status of an order
 
 const updateOrderStatus = async (req, res) => {

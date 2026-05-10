@@ -303,8 +303,8 @@ function initializeProductForm() {
       </div>
 
       <div class="buttons">
-        <button data-modal-target="#modal" class="submit-button" style="margin-top: 10px; margin-right: 5px;">Submit</button>
-        <button data-modal-target="#modal" class="quit-button">Quit</button>
+        <button class="submit-button" style="margin-top: 10px; margin-right: 5px;">Submit</button>
+        <button class="quit-button">Quit</button>
       </div>
 
     </div>

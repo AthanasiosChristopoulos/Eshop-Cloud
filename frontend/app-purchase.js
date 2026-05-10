@@ -342,6 +342,7 @@ function showPurchaseModal() {
 }
 
 function initializePurchaseButtonEventListener(button, totalOrderPrice) {
+
     button.addEventListener("click", async () => {
         const products = basket.map((item) => ({
             title: item.title,
@@ -363,6 +364,7 @@ function initializePurchaseButtonEventListener(button, totalOrderPrice) {
                 },
                 body: JSON.stringify(orderData),
             });
+            console.log("response:", response);
 
             const responseData = await response.json();
 
@@ -401,12 +403,6 @@ function initializeOpenModalEventListeners() {
             const modal = document.querySelector(button.dataset.modalTarget);
             openModal(modal);
         });
-    });
-}
-
-function initializeCloseModalEventListener(modal, button) {
-    button.addEventListener("click", () => {
-        closeModal(modal);
     });
 }
 

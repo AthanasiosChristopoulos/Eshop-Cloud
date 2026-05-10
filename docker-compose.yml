@@ -53,19 +53,6 @@ services:
       - kafka
     restart: always
 
-  # schema-registry:
-  #   image: confluentinc/cp-schema-registry:7.2.1
-  #   container_name: schema-registry
-  #   depends_on:
-  #     - kafka
-  #   ports:
-  #     - "8082:8082"
-  #   environment:
-  #     SCHEMA_REGISTRY_HOST_NAME: "schema-registry"
-  #     SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "kafka:19092"
-  #   networks:
-  #     - kafka
-
   mysql-kc:
     container_name: mysql-kc
     image: mysql:8.0
@@ -195,6 +182,9 @@ services:
       DB_NAME: orders
     volumes:
       - ./:/app
+    networks:
+      - default
+      - kafka
 
   product_service:
     build: 
@@ -214,7 +204,9 @@ services:
       DB_NAME: products
     volumes:
       - ./:/app
-      
+    networks:
+      - default
+      - kafka
 # ======================================================================================================
 # ======================================================================================================
 

@@ -144,3 +144,13 @@ To connect to the PostgreSQL database directly via Docker:
 ```bash
 docker exec -it product_db psql -U postgres -d products
 ```
+
+## =====================================================================================
+## Error Logging:
+
+Use Devtools for the frontend
+Use:
+```bash
+docker logs -f order_service    # to debug the backend services running in docker
+    # Again use console.log( ... ) for printing 
+ ```
