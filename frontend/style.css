@@ -214,11 +214,21 @@ body {
     flex-direction: row;
     align-items: center;
     margin-bottom: 15px;
+    width: 100%;
 }
 
 .inputValue label {
     width: 150px;
-    margin-right: 10px;
+}
+
+.formInput {
+    flex: 1;
+    height: 30px;
+    border-radius: 4px;
+}
+
+.formInput:focus {
+    outline: none;  
 }
 
 .buttons {

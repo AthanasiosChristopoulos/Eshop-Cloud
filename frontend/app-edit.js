@@ -284,22 +284,22 @@ function initializeProductForm() {
 
       <div class="inputValue">
         <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title" placeholder="Enter title"><br><br>
+        <input type="text" id="title" name="title" placeholder="Enter title" class="formInput"><br><br>
       </div>
 
       <div class="inputValue">
         <label for="img">Image Location:</label><br>
-        <input type="text" id="img" name="img" placeholder="Enter image location"><br><br>
+        <input type="text" id="img" name="img" placeholder="Enter image location" class="formInput"><br><br>
       </div>
 
       <div class="inputValue">
         <label for="quantity">Quantity:</label><br>
-        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity"><br><br>
+        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" class="formInput"><br><br>
       </div>
 
       <div class="inputValue">
         <label for="price">Price:</label><br>
-        <input type="number" id="price" name="price" step="0.01" placeholder="Enter price"><br><br>
+        <input type="number" id="price" name="price" step="0.01" placeholder="Enter price" class="formInput"><br><br>
       </div>
 
       <div class="buttons">
@@ -361,17 +361,6 @@ function showAlertModal(message) {
 // Modal Handling
 // =============================
 
-function initializeOpenModalEventListeners() {
-    const openModalButtons = document.querySelectorAll("[data-modal-target]");
-
-    openModalButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            const modal = document.querySelector(button.dataset.modalTarget);
-            openModal(modal);
-        });
-    });
-}
-
 function initializeNoButtonEventListener(modal, button) {
     button.addEventListener("click", () => {
         closeModal(modal);
@@ -396,5 +385,3 @@ function closeModal(modal) {
         overlay.classList.remove("active");
     }
 }
-
-initializeOpenModalEventListeners();
