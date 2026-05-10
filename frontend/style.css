@@ -1,18 +1,19 @@
-  html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     width: 100%;
-    font-family: 'Lato', sans-serif;
+    font-family: "Lato", sans-serif;
     background-color: #242423;
-  }
+}
 
-  *,
-  *::after,
-  *::before {
+*,
+*::after,
+*::before {
     box-sizing: border-box;
-  }
+}
 
-  .navbar {
+.navbar {
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -20,33 +21,29 @@
     background-color: #9d4edd;
     color: white;
     padding: 25px 60px;
-  }
-  
+}
 
-  .navbar #header {
+.navbar #header {
     color: black;
     font-size: 50px;
     margin-bottom: 10px;
     margin-top: 10px;
+}
 
-  }
-
-  #allProducts {
+#allProducts {
     display: flex;
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
     padding-left: 25px;
     background-color: #242423;
-    position: relative; 
+    position: relative;
     padding: 10px;
     padding-right: 50px;
     padding-left: 50px;
     min-width: 200px;
     min-height: 400px;
-    
+}
 
-  }
-  
-  .product {
+.product {
     position: relative;
     border: 3px solid #6b4987;
     width: 200px;
@@ -54,41 +51,38 @@
     margin: 2rem;
     padding: 0px;
     color: #f7e1d7;
-    
-  }
+}
 
-  .content{
-    margin:15px; 
-  }
+.content {
+    margin: 15px;
+}
 
-  #addproduct{
+#addproduct {
     border: 3px dashed #6b4987;
-  }
-  
-  .image {
-    display: block; 
-    max-width: 100%; 
+}
+
+.image {
+    display: block;
+    max-width: 100%;
     margin: 0;
     margin-bottom: 20px;
     border-radius: 5px;
     padding: px;
+}
 
-  }
-  
-  .bi-trash3 {
+.bi-trash3 {
     position: absolute;
-    top: -18px; 
-    right: -17px; 
+    top: -18px;
+    right: -17px;
     color: black;
     background-color: #d4315f;
     border-radius: 30%;
     cursor: pointer;
-    padding: 3px; 
+    padding: 3px;
     margin: 5px;
-  }
+}
 
-
-  .bi-pencil {
+.bi-pencil {
     position: absolute;
     bottom: 0px;
     right: 0px;
@@ -97,438 +91,411 @@
     border-radius: 3px;
     cursor: pointer;
     margin: 5px;
-  }
-  
-  .bi-plus-circle{
+}
+
+.bi-plus-circle {
     font-size: 100px;
     display: flex;
-    align-items: center; 
-    justify-content: center; 
-    height: 100%; 
+    align-items: center;
+    justify-content: center;
+    height: 100%;
     border-radius: 8px;
     cursor: pointer;
 }
 
-/* =================================================================================================================
-=================================================================================================================   */
+/* ============================================================================  */
 
 .modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  transition: 200ms ease-in-out;
-  border: 1px solid black;
-  border-radius: 10px;
-  z-index: 10;
-  background-color: #242423;
-  width: 500px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 200ms ease-in-out;
+    border: 1px solid black;
+    border-radius: 10px;
+    z-index: 10;
+    background-color: #242423;
+    width: 500px;
 }
 
 .modal.active {
-  transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%) scale(1);
 }
- 
-.modal-header {
-  padding: 10px 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid black;
-  background-color: #9d4edd;
 
+.modal-header {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid black;
+    background-color: #9d4edd;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .modal-header .title {
-  font-size: 1.25rem;
-  font-weight: bold;
+    font-size: 1.25rem;
+    font-weight: bold;
 }
 
 .modal-header .close-button {
-  cursor: pointer;
-  border: none;
-  outline: none;
-  background: none;
-  font-size: 1.25rem;
-  font-weight: bold;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 1.25rem;
+    font-weight: bold;
 }
 
 .modal-body {
-  padding: 15px; 
-  display: flex;
-  flex-direction: column; 
-  padding-bottom: 0px;
-  color: #f7e1d7;
-  padding-bottom: 15px;
-  
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0px;
+    color: #f7e1d7;
+    padding-bottom: 15px;
 }
 
 #overlay {
-  position: fixed;
-  opacity: 0;
-  transition: 200ms ease-in-out;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, .5);
-  pointer-events: none;
+    position: fixed;
+    opacity: 0;
+    transition: 200ms ease-in-out;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    pointer-events: none;
 }
 
 #overlay.active {
-  opacity: 1;
-  pointer-events: all;
-
+    opacity: 1;
+    pointer-events: all;
 }
-
 
 #alertModal {
-  border: 7px solid black;
-  width: 300px;
-  height: 200px;
-  background-color: #242423;
-
+    border: 7px solid black;
+    width: 300px;
+    height: 200px;
+    background-color: #242423;
 }
 
-#alertModalHeader{
-  background-color: #d90429;
+#alertModalHeader {
+    background-color: #d90429;
 }
 
-#alertModalBody{
-  margin-top: 10px;
-  line-height: 1.6  ;
-
+#alertModalBody {
+    margin-top: 10px;
+    line-height: 1.6;
 }
 
-.alertSign{
-  display: flex;
-  flex-direction: row;
-  font-size: larger;
-
+.alertSign {
+    display: flex;
+    flex-direction: row;
+    font-size: larger;
 }
 
-.bi-exclamation-triangle{
-  color: #ffbe0b;
-  margin-right: 10px; 
+.bi-exclamation-triangle {
+    color: #ffbe0b;
+    margin-right: 10px;
 }
 
-
-/* =================================================================================================================
-=================================================================================================================   */
+/* ============================================================================  */
 /* Add Value Modal */
 
 #addProductForm {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .inputValue {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 15px; 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
 .inputValue label {
-  width: 150px;
-  margin-right: 10px; 
+    width: 150px;
+    margin-right: 10px;
 }
 
 .buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: right;
-  width: 100%;
-  margin-top: 10px; 
-  align-items: baseline;
-
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    width: 100%;
+    margin-top: 10px;
+    align-items: baseline;
 }
 
-.submit-button{
-  margin: 5px; 
-  font-size: 20px;
-  background-color: #5fbf66;
-  cursor: pointer;
-  border-radius: 7px;
-  border: none;
+.submit-button {
+    margin: 5px;
+    font-size: 20px;
+    background-color: #5fbf66;
+    cursor: pointer;
+    border-radius: 7px;
+    border: none;
 }
 
 .quit-button {
-  margin: 5px; 
-  font-size: 20px;
-  background-color: #d4315f;
-  cursor: pointer;
-  border-radius: 7px;
-  border: none;
+    margin: 5px;
+    font-size: 20px;
+    background-color: #d4315f;
+    cursor: pointer;
+    border-radius: 7px;
+    border: none;
 }
 
-.yes-button{
-  margin: 5px; 
-  margin-left: 5px;
-  font-size: 20px;
-  background-color: #5fbf66;
-  cursor: pointer;
-  border-radius: 7px;
-  border: none;
+.yes-button {
+    margin: 5px;
+    margin-left: 5px;
+    font-size: 20px;
+    background-color: #5fbf66;
+    cursor: pointer;
+    border-radius: 7px;
+    border: none;
 }
 
 .no-button {
-  margin: 5px; 
-  margin-left: 5px;
-  font-size: 20px;
-  background-color: #d4315f;
-  cursor: pointer;
-  border-radius: 7px;
-  border: none;
+    margin: 5px;
+    margin-left: 5px;
+    font-size: 20px;
+    background-color: #d4315f;
+    cursor: pointer;
+    border-radius: 7px;
+    border: none;
 }
 
-.yesNoBody{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  border: none;
+.yesNoBody {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    border: none;
 }
 
-/* =================================================================================================================
-=================================================================================================================   */
+/* ============================================================================  */
 
-
-.searchBar{
-  display: flex;
-  flex-direction: rows;
-  margin-top: 15px;
-  margin-left: 3px;
-  width: 400px;
-  height: 40px;
-  background: #fff;
+.searchBar {
+    display: flex;
+    flex-direction: rows;
+    margin-top: 15px;
+    margin-left: 3px;
+    width: 400px;
+    height: 40px;
+    background: #fff;
 }
 
 #idSearch {
-  padding: 5px; 
-  font-size: 16px;
-  width: 400px;
-  border: none;
-  outline: none;
+    padding: 5px;
+    font-size: 16px;
+    width: 400px;
+    border: none;
+    outline: none;
 }
 
-.search-button{
-  background: #d4315f;
-  border: none;
-  outline: none;
-  padding: 5px;
-  cursor: pointer;
-  margin-left: 3px;
-  color: #fff;
-  width: 60px;
+.search-button {
+    background: #d4315f;
+    border: none;
+    outline: none;
+    padding: 5px;
+    cursor: pointer;
+    margin-left: 3px;
+    color: #fff;
+    width: 60px;
 }
 
-/* =================================================================================================================
-=================================================================================================================   */
+/* ============================================================================  */
 /* Home style */
 
-#homeButtons{
-  display: flex;
-  flex-direction: rows;
-  justify-content: center;
-  align-items: center;
-  padding-top: 120px;
-  background-color: #242423;
+#homeButtons {
+    display: flex;
+    flex-direction: rows;
+    justify-content: center;
+    align-items: center;
+    padding-top: 120px;
+    background-color: #242423;
 }
 
-.HyperlinkText{
-  text-decoration: none;
-  color: #333;
-  font-size: 45px;
-  margin: 10px;
+.HyperlinkText {
+    text-decoration: none;
+    color: #333;
+    font-size: 45px;
+    margin: 10px;
 }
 
-.homeHyperlink{
-  text-decoration: none;
-  color: #333;
-  font-size: 80px;
-  position: absolute;
-  top:47px;
-  right: 30px;
-  margin: 30px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
+.homeHyperlink {
+    text-decoration: none;
+    color: #333;
+    font-size: 80px;
+    position: absolute;
+    top: 47px;
+    right: 30px;
+    margin: 30px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 .circle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  color: #333;
-  font-size: 20px;
-  background-color: #f0f0f0;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 2px solid #333;
-  transition: all 0.3s ease-in-out;
-  padding: 100px;
-  margin: 50px;
-  border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    font-size: 20px;
+    background-color: #f0f0f0;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    transition: all 0.3s ease-in-out;
+    padding: 100px;
+    margin: 50px;
+    border: none;
 }
 
 .circle:hover {
-  background-color: #ddd;
-  transform: scale(1.1); 
+    background-color: #ddd;
+    transform: scale(1.1);
 }
 
-
-
-/* =================================================================================================================
-=================================================================================================================   */
+/* ============================================================================  */
 /* Purchase style */
 
-.bi.bi-dash-lg{
-  color: #d4315f;
-  font-size: 20px;
-  margin: 3px;
-  cursor: pointer;
-
+.bi.bi-dash-lg {
+    color: #d4315f;
+    font-size: 20px;
+    margin: 3px;
+    cursor: pointer;
 }
-.bi.bi-plus-lg{
-  color: #5fbf66;
-  font-size: 20px;
-  margin: 3px;
-  cursor: pointer;
-}
-
-.quantity{
-  font-size: 20px;
+.bi.bi-plus-lg {
+    color: #5fbf66;
+    font-size: 20px;
+    margin: 3px;
+    cursor: pointer;
 }
 
-.amountButtons{
-  display: flex;
-  flex-direction: row;      
-  justify-content: flex-end; 
-  align-items: center;     
-  width: 100%;              
-  position: absolute;       
-  bottom: 0;            
-  right: 0;              
-  margin: 4px;           
-
+.quantity {
+    font-size: 20px;
 }
 
-.cart{
-  color: #333;
-  font-size: 80px;
-  position: absolute;
-  top:47px;
-  right: 250px;
-  margin: 30px;
-  cursor: pointer;
-  background-color: transparent;
-  border:none;
+.amountButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 4px;
 }
 
-
+.cart {
+    color: #333;
+    font-size: 80px;
+    position: absolute;
+    top: 47px;
+    right: 250px;
+    margin: 30px;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
 
 .cartAmount {
-  position: absolute;
-  top: -1px;
-  right: 0px;
-  background-color: #eb0849;
-  color: #333;
-  padding: 3px;
-  border-radius: 3px;
-  font-size: 30px;
-  color: #242423;
-  padding-left:3px;
-  padding-right:3px; 
-  padding-top: 0px;
-  padding-bottom: 0px;
-
+    position: absolute;
+    top: -1px;
+    right: 0px;
+    background-color: #eb0849;
+    color: #333;
+    padding: 3px;
+    border-radius: 3px;
+    font-size: 30px;
+    color: #242423;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
-.productOrder{
-  display: flex;
-  flex-direction: row;  
-  align-items: center;
-  margin: 0px;
-  padding: 0px;
-  color: #f7e1d7;
-  font-size: 15px;
-  overflow: hidden;     
-  box-sizing: border-box; 
-  height: 30px;
+.productOrder {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0px;
+    padding: 0px;
+    color: #f7e1d7;
+    font-size: 15px;
+    overflow: hidden;
+    box-sizing: border-box;
+    height: 30px;
 }
 
-.totalPrice{
-  color: #f7e1d7;
-  font-size: 22px;
-  font-weight: bold; 
-  margin-top:5px;
-  display: flex;
-  flex-direction: row;  
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 0px;
+.totalPrice {
+    color: #f7e1d7;
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0px;
 }
 
-.bi-bag-check{
-  margin-right: 10px; 
-  border-radius: 70px;
-  color: #5fbf66;
+.bi-bag-check {
+    margin-right: 10px;
+    border-radius: 70px;
+    color: #5fbf66;
 }
 
-
-.totalPriceHeader{
-  align-items: baseline;
-  width:200px;
-
+.totalPriceHeader {
+    align-items: baseline;
+    width: 200px;
 }
 
-/* =================================================================================================================
-=================================================================================================================   */
+/* ============================================================================  */
 /* Order style */
 
 #allOrders {
-  display: flex;
-  flex-wrap: wrap; 
-  padding-left: 25px;
-  position: relative; 
-  background-color: #242423;
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 25px;
+    position: relative;
+    background-color: #242423;
 }
 
 .order {
-  position: relative;
-  border: 3px solid #c07f66;
-  width: 200px;
-  border-radius: 8px;
-  margin: 2rem;
-  padding: 0rem 0.5rem;
-  color: #f7e1d7;
+    position: relative;
+    border: 3px solid #c07f66;
+    width: 200px;
+    border-radius: 8px;
+    margin: 2rem;
+    padding: 0rem 0.5rem;
+    color: #f7e1d7;
 }
 
-/* =================================================================================================================
-=================================================================================================================   */
+/* ============================================================================  */
 /* 2 phase of project */
 
-
 .logout-button {
-  background-color: black; /* Remove background color */
-  color: #0852a1; /* Typical hyperlink blue color */
-  font-size: 20px; /* Adjust font size to match hyperlinks */
-  border: none; /* Remove the border */
-  cursor: pointer; /* Retain pointer cursor for interactivity */
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 6px 12px;
-  border-radius: 10px;
-
-
+    background-color: black; /* Remove background color */
+    color: #0852a1; /* Typical hyperlink blue color */
+    font-size: 20px; /* Adjust font size to match hyperlinks */
+    border: none; /* Remove the border */
+    cursor: pointer; /* Retain pointer cursor for interactivity */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 6px 12px;
+    border-radius: 10px;
 }
 
 .logout-button:hover {
-  color: #0056b3; /* Darker blue for hover effect */
-  text-decoration: none; /* Remove underline on hover for effect */
+    color: #0056b3; /* Darker blue for hover effect */
+    text-decoration: none; /* Remove underline on hover for effect */
 }
