@@ -8,22 +8,22 @@ url = `http://127.0.0.1:5001/orders`;
 const token = localStorage.getItem("decodedToken");
 console.log(token);
 if (token) {
-  const username = JSON.parse(token).username;
-  
-  url = `http://127.0.0.1:5001/orders/${username}`;
-} else{
-  console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+    const username = JSON.parse(token).username;
+
+    url = `http://127.0.0.1:5001/orders/${username}`;
+} else {
+    console.log("No token");
 }
 
 let initializeGoBackButtonEventListener = (go_back_button) => {
-  go_back_button.addEventListener('click', async () => {
-    redirect_to_login();
-  });
+    go_back_button.addEventListener('click', async () => {
+        redirect_to_login();
+    });
 }
 let initializeLogoutEventListener = (logout_button) => {
-  logout_button.addEventListener('click', async () => {
-    logout();
-  });
+    logout_button.addEventListener('click', async () => {
+        logout();
+    });
 }
 
 const allOrdersDiv = document.getElementById("allOrders");
@@ -31,92 +31,93 @@ const allOrdersDiv = document.getElementById("allOrders");
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-  try {
-      if(JSON.parse(token).user_role != 'customer'){
-        
-        openModal(modal);
+    try {
+        if (JSON.parse(token).user_role != 'customer') {
 
-        ModalHeader.innerHTML = "Wrong User Role";
-        ModalBody.innerHTML = '';
+            openModal(modal);
 
-        const content = `
+            ModalHeader.innerHTML = "Wrong User Role";
+            ModalBody.innerHTML = '';
+
+            const content = `
             <div class="buttons">
               <button class="submit-button" style="margin-top: 10px; margin-right: 5px;" id="go_back">Go Back</button>
               <button class="quit-button" id="logout">Logout</button>
             </div>
         `;
-        ModalBody.innerHTML += content;
+            ModalBody.innerHTML += content;
 
-        const go_back_button = document.getElementById("go_back");
-        const logout_button = document.getElementById("logout");
-      
-        initializeGoBackButtonEventListener(go_back_button);
-        initializeLogoutEventListener(logout_button);
-      }
-  } catch (error) {
-    console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-  }
+            const go_back_button = document.getElementById("go_back");
+            const logout_button = document.getElementById("logout");
 
-  try {
-    console.log(url);
-    const response = await fetch(url);
-
-    if (response.ok) {
-    
-      allOrdersDiv.innerHTML = ``;
-
-      const orders = await response.json();
-
-      putOrderDivs(orders);
-      initializeOpenModalEventListeners();
-
-    } else {
-      console.error("Error fetching products");
+            initializeGoBackButtonEventListener(go_back_button);
+            initializeLogoutEventListener(logout_button);
+        }
+    } catch (error) {
+        console.log("Error");
     }
-  } catch (e) {
-    console.log("Error:", e);
-  }
+
+    try {
+        console.log(url);
+        const response = await fetch(url);
+
+        if (response.ok) {
+
+            allOrdersDiv.innerHTML = ``;
+
+            const orders = await response.json();
+
+            putOrderDivs(orders);
+            initializeOpenModalEventListeners();
+
+        } else {
+            console.error("Error fetching products");
+        }
+    } catch (e) {
+        console.log("Error:", e);
+    }
 });
 
-//=====================================================================================
-//=====================================================================================
+// =====================================================================================
 // Get Product By Id
 
 const searchButton = document.querySelector('.search-button')
 
 searchButton.addEventListener("click", async () => {
-    
-  const searchValue = document.getElementById("idSearch").value;
 
-  if (searchValue){
+    const searchValue = document.getElementById("idSearch").value;
 
-    try {
-      const response = await fetch(`${url}/${searchValue}`);
-  
-      if (response.ok) {
-        
-        const orders = await response.json();
-        allOrdersDiv.innerHTML = ``;
+    if (searchValue) {
 
-        putOrderDivs(orders);
-        initializeOpenModalEventListeners();
+        try {
+            const response = await fetch(`${url}/${searchValue}`);
 
-      } else {
+            if (response.ok) {
 
-        showAlertModal("Product not found.");
-      }
+                const orders = await response.json();
+                allOrdersDiv.innerHTML = ``;
 
-    } catch (e) {
-      console.log("Error:", e);
+                putOrderDivs(orders);
+                initializeOpenModalEventListeners();
+
+            } else {
+
+                showAlertModal("Product not found.");
+            }
+
+        } catch (e) {
+            console.log("Error:", e);
+        }
     }
-  }
-  else{
-    location.reload(); 
-  }
+    else {
+        location.reload();
+    }
 });
 
-//=====================================================================================
-//=====================================================================================
+// =====================================================================================
+
+// =====================================================================================
+
 
 let putOrderDivs = (orders) => {
 
@@ -143,7 +144,7 @@ let putOrderDivs = (orders) => {
         });
     } else {
 
-        const order = orders; 
+        const order = orders;
         const ordersContent = `
             <div class="order">
                 <p>Id: ${order.id}</p>
@@ -164,112 +165,96 @@ let putOrderDivs = (orders) => {
     }
 }
 
-//=====================================================================================
-//=====================================================================================
+// =====================================================================================
+
+// =====================================================================================
+
 // deleteProduct
 
 let deleteProduct = (id) => {
 
     ModalHeader.innerHTML = "Delete Product";
     ModalBody.innerHTML = `
-  
-    <div class="yesNoBody">
-      <p>Are you sure you want to delete the order with id = ${id}?</p>
-      <div class="buttons">
-        <button data-modal-target="#modal" class="yes-button">Yes</button>
-        <button data-modal-target="#modal" class="no-button">No</button>
-      </div>
-    </div>
-  
+        <div class="yesNoBody">
+            <p>Are you sure you want to delete the order with id = ${id}?</p>
+            <div class="buttons">
+                <button data-modal-target="#modal" class="yes-button">Yes</button>
+                <button data-modal-target="#modal" class="no-button">No</button>
+            </div>
+        </div>
     `;
-    
-    const yesButton = document.querySelector('.yes-button')
+
     const noButton = document.querySelector('.no-button');
-  
+    noButton.addEventListener('click', () => {
+        closeModal(modal);
+    });
+
+    const yesButton = document.querySelector('.yes-button')
     const modal = document.querySelector(yesButton.dataset.modalTarget)
-  
-    initializeYesButtonEventListener(id, modal,yesButton);
-    initializeNoButtonEventListener(modal, noButton);
-  
-  };
-  
 
-  let initializeYesButtonEventListener = (id, modal, button) => {
-  
     button.addEventListener('click', async () => {
+        try {
+            const response = await fetch(`${url}/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
-      try {
-        const response = await fetch(`${url}/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-  
-        if (response.ok) {
-  
-          console.log(`Product with ID ${id} deleted successfully.`);
-          closeModal(modal); 
-          location.reload(); 
-  
-        } else {
-          console.error('Error deleting product');
+            if (response.ok) {
+
+                console.log(`Product with ID ${id} deleted successfully.`);
+                closeModal(modal);
+                location.reload();
+
+            } else {
+                console.error('Error deleting product');
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
         }
-      } catch (error) {
-        console.error('Error:', error);
-      }
     });
-  
-  };
-  
+};
 
-  let initializeNoButtonEventListener = (modal, button) => {
-  
-    button.addEventListener('click', () => {
-      closeModal(modal); 
-      
-    });
-  };
+// =====================================================================================
 
-  
-//=====================================================================================
-//=====================================================================================
 // Modal handling
 
 const ModalHeader = document.getElementById("ModalHeader");
-const ModalBody = document.getElementById("ModalBody"); 
+const ModalBody = document.getElementById("ModalBody");
 const alertModalBody = document.getElementById("alertModalBody");
 
 const overlay = document.getElementById("overlay")
 
 
 let initializeOpenModalEventListeners = () => {
-  const openModalButtons = document.querySelectorAll('[data-modal-target]')
-  openModalButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const modal = document.querySelector(button.dataset.modalTarget)
-      openModal(modal)
+    const openModalButtons = document.querySelectorAll('[data-modal-target]')
+    openModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = document.querySelector(button.dataset.modalTarget)
+            openModal(modal)
+        })
     })
-  })
 }
 
 let initializeCloseModalEventListeners = () => {
-  const closeModalButtons = document.querySelectorAll('[data-close-button]')
-  closeModalButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const modal = button.closest('.modal')
-      closeModal(modal)
+    const closeModalButtons = document.querySelectorAll('[data-close-button]')
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('.modal')
+            closeModal(modal)
+        })
     })
-  })
 }
 
 let initializeOverlayModalEventListeners = () => {
-  overlay.addEventListener('click', () => {
-    const modals = document.querySelectorAll('.modal.active')
-    modals.forEach(modal => {
-      closeModal(modal)
+    overlay.addEventListener('click', () => {
+        const modals = document.querySelectorAll('.modal.active')
+        modals.forEach(modal => {
+            closeModal(modal)
+        })
     })
-  })
 }
 
 initializeOpenModalEventListeners();
@@ -277,42 +262,42 @@ initializeCloseModalEventListeners();
 initializeOverlayModalEventListeners();
 
 function openModal(modal) {
-  if (modal == null) {
-    return
-  }
+    if (modal == null) {
+        return
+    }
 
-  modal.classList.add('active')
+    modal.classList.add('active')
 
-  overlay.classList.add('active')
+    overlay.classList.add('active')
 
 }
 
 function closeModal(modal) {
 
-  if (modal == null) {
-    return
-  }  
+    if (modal == null) {
+        return
+    }
 
-  modal.classList.remove('active')
+    modal.classList.remove('active')
 
-  const activeModals = document.querySelectorAll('.modal.active');
-  
-  if (activeModals.length === 0) {
-    overlay.classList.remove('active');
-  }
+    const activeModals = document.querySelectorAll('.modal.active');
+
+    if (activeModals.length === 0) {
+        overlay.classList.remove('active');
+    }
 
 }
 
-  
+
 let showAlertModal = (str) => {
 
     const alertModal = document.getElementById('alertModal')
-  
+
     openModal(alertModal)
     alertModalBody.innerHTML = str
-  
+
     return
-  }
+}
 
 
 

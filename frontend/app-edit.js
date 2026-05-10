@@ -10,6 +10,7 @@ if (token) {
     url = `${BASE_URL}/${decodedToken.username}`;
 }
 
+const main_modal = document.getElementById("modal");
 const allProductsDiv = document.getElementById("allProducts");
 const ModalHeader = document.getElementById("ModalHeader");
 const ModalBody = document.getElementById("ModalBody");
@@ -42,7 +43,7 @@ function checkUserRole() {
 }
 
 function showWrongRoleModal() {
-    openModal(document.getElementById("modal"));
+    openModal(main_modal);
 
     ModalHeader.innerHTML = "Wrong User Role";
     ModalBody.innerHTML = `
@@ -62,44 +63,45 @@ function showWrongRoleModal() {
 
 async function loadProducts() {
     try {
-    const response = await fetch(url);
+        const response = await fetch(url);
 
-      if (!response.ok) {
-          console.error("Error fetching products");
-          return;
-      }
+        if (!response.ok) {
+            console.error("Error fetching products");
+            return;
+        }
 
-      const products = await response.json();
+        const products = await response.json();
 
-      allProductsDiv.innerHTML = `
-      <div class="product" id="addproduct">
-        <i onclick="addProduct()" data-modal-target="#modal" class="bi bi-plus-circle"></i>
-      </div>
-    `;
+        // this is the product card to add other products, rendered at the start
+        allProductsDiv.innerHTML = `    
+            <div class="product" id="addproduct">
+                <i onclick="addProduct()" class="bi bi-plus-circle"></i>
+            </div>
+        `;
 
-      displayProducts(products);
-      initializeOpenModalEventListeners();
+        displayProducts(products);
+        initializeOpenModalEventListeners();
 
-  } catch (error) {
-      console.error("Error:", error);
-  }
+    } catch (error) {
+        console.error("Error:", error);
+    }
 }
 
 function displayProducts(products) {
     allProductsDiv.innerHTML += products.map(product => `
-    <div class="product">
-      <img src="${product.img}" class="image"/>
+        <div class="product">
+            <img src="${product.img}" class="image"/>
 
-      <div class="content">
-        <p>Title: ${product.title}</p>
-        <p>Price: $${product.price}</p>
-        <p>Quantity: ${product.quantity}</p>
+            <div class="content">
+                <p>Title: ${product.title}</p>
+                <p>Price: $${product.price}</p>
+                <p>Quantity: ${product.quantity}</p>
 
-        <i onclick="updateProduct(${product.id})" data-modal-target="#modal" class="bi bi-pencil"></i>
-        <i onclick="deleteProduct(${product.id})" data-modal-target="#modal" class="bi bi-trash3"></i>
-      </div>
-    </div>
-  `).join("");
+                <i onclick="updateProduct(${product.id})" class="bi bi-pencil"></i>
+                <i onclick="deleteProduct(${product.id})" class="bi bi-trash3"></i>
+            </div>
+        </div>
+    `).join("");
 }
 
 // =============================
@@ -115,22 +117,22 @@ searchButton.addEventListener("click", async () => {
     }
 
     try {
-      const response = await fetch(`${url}/${searchValue}`);
+        const response = await fetch(`${url}/${searchValue}`);
 
-      if (!response.ok) {
-          showAlertModal("Product not found.");
-          return;
-      }
+        if (!response.ok) {
+            showAlertModal("Product not found.");
+            return;
+        }
 
-      const products = await response.json();
+        const products = await response.json();
 
-      allProductsDiv.innerHTML = "";
-      displayProducts(products);
-      initializeOpenModalEventListeners();
+        allProductsDiv.innerHTML = "";
+        displayProducts(products);
+        initializeOpenModalEventListeners();
 
-  } catch (error) {
-      console.error("Error:", error);
-  }
+    } catch (error) {
+        console.error("Error:", error);
+    }
 });
 
 // =============================
@@ -138,41 +140,41 @@ searchButton.addEventListener("click", async () => {
 // =============================
 
 function addProduct() {
-  ModalHeader.innerHTML = "Add Product";
-
+    
+    ModalHeader.innerHTML = "Add Product";
+    openModal(main_modal);
     const { submitButton, quitButton } = initializeProductForm();
-  const modal = document.querySelector(submitButton.dataset.modalTarget);
 
     submitButton.addEventListener("click", async () => {
         const productData = getProductFormData();
 
-      if (!validateProductData(productData, true)) return;
+        if (!validateProductData(productData, true)) return;
 
-      try {
-          const response = await fetch(url, {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json"
-          },
-          body: JSON.stringify(productData)
-      });
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(productData)
+            });
 
-        const responseData = await response.json();
+            const responseData = await response.json();
 
-        if (response.ok) {
-          closeModal(modal);
-          location.reload();
-      } else {
-          showAlertModal(responseData.error || "Error adding product. Please try again.");
-      }
+            if (response.ok) {
+                closeModal(main_modal);
+                location.reload();
+            } else {
+                showAlertModal(responseData.error || "Error adding product. Please try again.");
+            }
 
-    } catch (error) {
-        console.error("Error:", error);
-        showAlertModal("Error adding product.");
-    }
-  });
+        } catch (error) {
+            console.error("Error:", error);
+            showAlertModal("Error adding product.");
+        }
+    });
 
-  initializeNoButtonEventListener(modal, quitButton);
+    initializeNoButtonEventListener(main_modal, quitButton);
 }
 
 // =============================
@@ -180,45 +182,45 @@ function addProduct() {
 // =============================
 
 function updateProduct(id) {
-    ModalHeader.innerHTML = "Update Product";
 
+    ModalHeader.innerHTML = "Update Product";
+    openModal(main_modal);
     const { submitButton, quitButton } = initializeProductForm();
-    const modal = document.querySelector(submitButton.dataset.modalTarget);
 
     submitButton.addEventListener("click", async () => {
         const formData = getProductFormData();
         const productData = {};
 
-      if (formData.title) productData.title = formData.title;
-      if (formData.img) productData.img = formData.img;
-      if (formData.quantity) productData.quantity = formData.quantity;
-      if (formData.price) productData.price = formData.price;
+        if (formData.title) productData.title = formData.title;
+        if (formData.img) productData.img = formData.img;
+        if (formData.quantity) productData.quantity = formData.quantity;
+        if (formData.price) productData.price = formData.price;
 
-      if (!validateProductData(productData, false)) return;
+        if (!validateProductData(productData, false)) return;
 
-    try {
-      const response = await fetch(`${url}/${id}`, {
-          method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(productData)
-      });
+        try {
+            const response = await fetch(`${url}/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(productData)
+            });
 
-        if (response.ok) {
-          closeModal(modal);
-          location.reload();
-      } else {
-          showAlertModal("Error updating product.");
-      }
+            if (response.ok) {
+                closeModal(main_modal);
+                location.reload();
+            } else {
+                showAlertModal("Error updating product.");
+            }
 
-    } catch (error) {
-      console.error("Error:", error);
-        showAlertModal("Error updating product.");
-    }
-  });
+        } catch (error) {
+            console.error("Error:", error);
+            showAlertModal("Error updating product.");
+        }
+    });
 
-    initializeNoButtonEventListener(modal, quitButton);
+    initializeNoButtonEventListener(main_modal, quitButton);
 }
 
 // =============================
@@ -226,44 +228,46 @@ function updateProduct(id) {
 // =============================
 
 function deleteProduct(id) {
-  ModalHeader.innerHTML = "Delete Product";
 
+    openModal(main_modal)
+    
+    ModalHeader.innerHTML = "Delete Product";
     ModalBody.innerHTML = `
-    <div class="yesNoBody">
-      <p>Are you sure you want to delete the product with id = ${id}?</p>
+        <div class="yesNoBody">
+            <p>Are you sure you want to delete the product with id = ${id}?</p>
 
-      <div class="buttons">
-        <button data-modal-target="#modal" class="yes-button">Yes</button>
-        <button data-modal-target="#modal" class="no-button">No</button>
-      </div>
-    </div>
-  `;
+            <div class="buttons">
+                <button data-modal-target="#modal" class="yes-button">Yes</button>
+                <button class="no-button">No</button>
+            </div>
+        </div>
+    `;
 
     const yesButton = document.querySelector(".yes-button");
     const noButton = document.querySelector(".no-button");
     const modal = document.querySelector(yesButton.dataset.modalTarget);
 
     yesButton.addEventListener("click", async () => {
-    try {
-      const response = await fetch(`${url}/${id}`, {
-          method: "DELETE",
-        headers: {
-            "Content-Type": "application/json"
+        try {
+            const response = await fetch(`${url}/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (response.ok) {
+                closeModal(modal);
+                location.reload();
+            } else {
+                showAlertModal("Error deleting product.");
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            showAlertModal("Error deleting product.");
         }
-      });
-
-        if (response.ok) {
-          closeModal(modal);
-          location.reload();
-      } else {
-          showAlertModal("Error deleting product.");
-      }
-
-    } catch (error) {
-        console.error("Error:", error);
-        showAlertModal("Error deleting product.");
-    }
-  });
+    });
 
     initializeNoButtonEventListener(modal, noButton);
 }
@@ -358,33 +362,33 @@ function showAlertModal(message) {
 function initializeOpenModalEventListeners() {
     const openModalButtons = document.querySelectorAll("[data-modal-target]");
 
-  openModalButtons.forEach(button => {
-      button.addEventListener("click", () => {
-          const modal = document.querySelector(button.dataset.modalTarget);
-          openModal(modal);
-      });
-  });
+    openModalButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const modal = document.querySelector(button.dataset.modalTarget);
+            openModal(modal);
+        });
+    });
 }
 
 function initializeCloseModalEventListeners() {
     const closeModalButtons = document.querySelectorAll("[data-close-button]");
 
-  closeModalButtons.forEach(button => {
-      button.addEventListener("click", () => {
-          const modal = button.closest(".modal");
-          closeModal(modal);
-      });
-  });
+    closeModalButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const modal = button.closest(".modal");
+            closeModal(modal);
+        });
+    });
 }
 
 function initializeOverlayModalEventListeners() {
     overlay.addEventListener("click", () => {
         const activeModals = document.querySelectorAll(".modal.active");
 
-      activeModals.forEach(modal => {
-          closeModal(modal);
-      });
-  });
+        activeModals.forEach(modal => {
+            closeModal(modal);
+        });
+    });
 }
 
 function initializeNoButtonEventListener(modal, button) {
@@ -407,9 +411,9 @@ function closeModal(modal) {
 
     const activeModals = document.querySelectorAll(".modal.active");
 
-  if (activeModals.length === 0) {
-      overlay.classList.remove("active");
-  }
+    if (activeModals.length === 0) {
+        overlay.classList.remove("active");
+    }
 }
 
 initializeOpenModalEventListeners();
