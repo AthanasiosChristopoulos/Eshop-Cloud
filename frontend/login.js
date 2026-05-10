@@ -14,11 +14,11 @@ function redirect_to_login() {
         redirect_uri: REDIRECT_URI
     });
 
-    window.location.href = `${KEYCLOAK_BASE_URL}/auth?${params.toString()}`;    // this is th login page
+    window.location.href = `${KEYCLOAK_BASE_URL}/auth?${params.toString()}`;    // this is the login page
 }
 
 // =============================
-// Page Load
+// Page Load (this trigger when this .js file is executed from the index.html)
 // =============================
 
 window.onload = function () {
@@ -30,7 +30,7 @@ window.onload = function () {
         return;
     }
 
-    const isLoginPage = // are those the starting pages / the login pages
+    const isLoginPage =         // those are the starting pages / the login pages
         window.location.href === "http://127.0.0.1:5500/" ||
         window.location.href === "http://127.0.0.1:5500/index.html" ||
         window.location.href === "http://localhost:5500/";
@@ -60,9 +60,9 @@ function decodeJwt(jwtToken) {
     return JSON.parse(jsonPayload);
 }
 
-// =============================
-// Exchange Code For Token
-// =============================
+// ==============================================================================================
+// Exchange Code For Token. This will set to the users localstorage the decodedToken JWT token 
+// ==============================================================================================
 
 async function exchangeCodeForToken(authCode) {
     const body = new URLSearchParams({
@@ -117,7 +117,7 @@ function redirectUserByRole(decodedToken) {
 // =============================
 
 function logout() {
-    localStorage.removeItem("decodedToken");
+    localStorage.removeItem("decodedToken");    // remove ability to reconnect, need to go through login 
 
     const logoutRedirect = encodeURIComponent("http://127.0.0.1:5500/?logout=success");
 
@@ -132,10 +132,4 @@ const logoutButton = document.getElementById("logoutButton");
 
 if (logoutButton) {
     logoutButton.addEventListener("click", logout);
-}
-
-const loginButton = document.getElementById("loginButton");
-
-if (loginButton) {
-    loginButton.addEventListener("click", redirect_to_login);
 }

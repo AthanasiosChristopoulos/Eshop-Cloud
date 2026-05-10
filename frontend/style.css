@@ -532,32 +532,3 @@
   color: #0056b3; /* Darker blue for hover effect */
   text-decoration: none; /* Remove underline on hover for effect */
 }
-
-
-#loginButton {
-  font-size: x-large;
-  background-color: #9d4edd;
-  color: #242423;
-  padding: 10px 20px;  
-  
-  display: flex;
-  justify-content: center;  
-  align-items: center;  
-
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);  
-  cursor: pointer;
-
-  border-radius: 20px;
-  border: none;
-  width: 250px;
-  height: 150px;
-
-  /* Prevent the text from wrapping */
-  white-space: nowrap;
-
-  /* Center the text inside the button */
-  text-align: center;
-}
