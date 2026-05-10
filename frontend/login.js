@@ -1,5 +1,5 @@
 
-const KEYCLOAK_BASE_URL = "http://127.0.0.1:8080/realms/eshop/protocol/openid-connect";
+const KEYCLOAK_BASE_URL = "http://127.0.0.1:8080/realms/eshop/protocol/openid-connect"; // this is something you change to work like this through configurations
 const CLIENT_ID = "frontend-client";
 const REDIRECT_URI = "http://127.0.0.1:5500";
 
@@ -8,13 +8,13 @@ const REDIRECT_URI = "http://127.0.0.1:5500";
 // =============================
 
 function redirect_to_login() {
-  const params = new URLSearchParams({
-    response_type: "code",
-    client_id: CLIENT_ID,
-    redirect_uri: REDIRECT_URI
-  });
+    const params = new URLSearchParams({
+        response_type: "code",
+        client_id: CLIENT_ID,
+        redirect_uri: REDIRECT_URI
+    });
 
-  window.location.href = `${KEYCLOAK_BASE_URL}/auth?${params.toString()}`;
+    window.location.href = `${KEYCLOAK_BASE_URL}/auth?${params.toString()}`;    // this is th login page
 }
 
 // =============================
@@ -22,22 +22,22 @@ function redirect_to_login() {
 // =============================
 
 window.onload = function () {
-  const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get("code");
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
 
-  if (code) {
-    exchangeCodeForToken(code);
-    return;
-  }
+    if (code) {
+        exchangeCodeForToken(code);
+        return;
+    }
 
-  const isLoginPage =
-    window.location.href === "http://127.0.0.1:5500/" ||
-    window.location.href === "http://127.0.0.1:5500/index.html" ||
-    window.location.href === "http://localhost:5500/";
+    const isLoginPage = // are those the starting pages / the login pages
+        window.location.href === "http://127.0.0.1:5500/" ||
+        window.location.href === "http://127.0.0.1:5500/index.html" ||
+        window.location.href === "http://localhost:5500/";
 
-  if (isLoginPage) {
-    redirect_to_login();
-  }
+    if (isLoginPage) {
+        redirect_to_login();
+    }
 };
 
 // =============================
@@ -45,19 +45,19 @@ window.onload = function () {
 // =============================
 
 function decodeJwt(jwtToken) {
-  const payload = jwtToken.split(".")[1];
-  const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const payload = jwtToken.split(".")[1];
+    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
 
-  const jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split("")
-      .map(char => {
-        return "%" + ("00" + char.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join("")
-  );
+    const jsonPayload = decodeURIComponent(
+        atob(base64)
+            .split("")
+            .map(char => {
+                return "%" + ("00" + char.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join("")
+    );
 
-  return JSON.parse(jsonPayload);
+    return JSON.parse(jsonPayload);
 }
 
 // =============================
@@ -65,37 +65,37 @@ function decodeJwt(jwtToken) {
 // =============================
 
 async function exchangeCodeForToken(authCode) {
-  const body = new URLSearchParams({
-    grant_type: "authorization_code",
-    code: authCode,
-    client_id: CLIENT_ID,
-    redirect_uri: REDIRECT_URI
-  });
-
-  try {
-    const response = await fetch(`${KEYCLOAK_BASE_URL}/token`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: body.toString()
+    const body = new URLSearchParams({
+        grant_type: "authorization_code",
+        code: authCode,
+        client_id: CLIENT_ID,
+        redirect_uri: REDIRECT_URI
     });
 
-    if (!response.ok) {
-      console.error("Failed to fetch token:", response.status, response.statusText);
-      return;
+    try {
+        const response = await fetch(`${KEYCLOAK_BASE_URL}/token`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: body.toString()
+        });
+
+        if (!response.ok) {
+            console.error("Failed to fetch token:", response.status, response.statusText);
+            return;
+        }
+
+        const data = await response.json();
+        const decodedToken = decodeJwt(data.access_token);
+
+        localStorage.setItem("decodedToken", JSON.stringify(decodedToken));
+
+        redirectUserByRole(decodedToken);
+
+    } catch (error) {
+        console.error("Error during token exchange:", error);
     }
-
-    const data = await response.json();
-    const decodedToken = decodeJwt(data.access_token);
-
-    localStorage.setItem("decodedToken", JSON.stringify(decodedToken));
-
-    redirectUserByRole(decodedToken);
-
-  } catch (error) {
-    console.error("Error during token exchange:", error);
-  }
 }
 
 // =============================
@@ -103,13 +103,13 @@ async function exchangeCodeForToken(authCode) {
 // =============================
 
 function redirectUserByRole(decodedToken) {
-  if (decodedToken.user_role === "seller") {
-    window.location.href = "http://127.0.0.1:5500/edit.html";
-  } else if (decodedToken.user_role === "customer") {
-    window.location.href = "http://127.0.0.1:5500/customer.html";
-  } else {
-    console.log("User is not authorized or does not have a role.");
-  }
+    if (decodedToken.user_role === "seller") {
+        window.location.href = "http://127.0.0.1:5500/edit.html";
+    } else if (decodedToken.user_role === "customer") {
+        window.location.href = "http://127.0.0.1:5500/customer.html";
+    } else {
+        console.log("User is not authorized or does not have a role.");
+    }
 }
 
 // =============================
@@ -117,11 +117,11 @@ function redirectUserByRole(decodedToken) {
 // =============================
 
 function logout() {
-  localStorage.removeItem("decodedToken");
+    localStorage.removeItem("decodedToken");
 
-  const logoutRedirect = encodeURIComponent("http://127.0.0.1:5500/?logout=success");
+    const logoutRedirect = encodeURIComponent("http://127.0.0.1:5500/?logout=success");
 
-  window.location.href = `${KEYCLOAK_BASE_URL}/logout?redirect_uri=${logoutRedirect}`;
+    window.location.href = `${KEYCLOAK_BASE_URL}/logout?redirect_uri=${logoutRedirect}`;
 }
 
 // =============================
@@ -131,11 +131,11 @@ function logout() {
 const logoutButton = document.getElementById("logoutButton");
 
 if (logoutButton) {
-  logoutButton.addEventListener("click", logout);
+    logoutButton.addEventListener("click", logout);
 }
 
 const loginButton = document.getElementById("loginButton");
 
 if (loginButton) {
-  loginButton.addEventListener("click", redirect_to_login);
+    loginButton.addEventListener("click", redirect_to_login);
 }

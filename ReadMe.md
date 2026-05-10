@@ -30,7 +30,7 @@ docker compose up
 
 ---
 
-## 2. Configure Keycloak    ======================================================================
+## 2. Configure Keycloak ======================================================================
 
 Open the Keycloak admin console at **http://localhost:8080**. To login as admin and configure stuff, use:
     - username: admin and password: admin
@@ -130,3 +130,16 @@ To connect to the PostgreSQL database directly via Docker:
 ```bash
 docker exec -it product_db psql -U postgres -d products
 ```
+
+## Login Process explained:
+
+1. When the page loads, it checks the URL for a code.
+2. If there is no code, it sends the user to Keycloak login.
+3. The user logs in through Keycloak.
+4. Keycloak sends the user back to your frontend with a code.
+5. Your code sends that code to Keycloak and asks for a token.
+6. Keycloak returns an access token.
+7. Your code decodes the token and saves the user info in localStorage.
+    If the user is a seller, they go to edit.html.
+    If the user is a customer, they go to customer.html.
+8. When the user clicks logout, the saved token is removed and the user is redirected to Keycloak logout.
