@@ -9,23 +9,28 @@ const REDIRECT_URI = "http://127.0.0.1:5500";
 
 function redirect_to_login() {
     const params = new URLSearchParams({
-        response_type: "code",
-        client_id: CLIENT_ID,
+        response_type: "code",  // we need this in URL, so we can get the access code from keycloack
+        // this tells keycloack, “When you send the browser back, include an authorization code.”
+        client_id: CLIENT_ID,   
         redirect_uri: REDIRECT_URI
     });
 
-    window.location.href = `${KEYCLOAK_BASE_URL}/auth?${params.toString()}`;    // this is the login page
+    window.location.href = `${KEYCLOAK_BASE_URL}/auth?${params.toString()}`;    
+        // this is the login page where the user has to enter the username and password
+        // Keycloak sends the user back to the frontend with a code (again window.onload will run but this time the user will have the ?code=... parameter).
+        // this is the request that will lead to the ?code=... redirect (this is just a GET request)
 }
 
-// =============================
+// =======================================================================================
 // Page Load (this trigger when this .js file is executed from the index.html)
-// =============================
+// =======================================================================================
+// When this browser tab / page / window fully loads, execute this code.
 
-window.onload = function () {
+window.onload = function () {   // this runs for all the pages, even "http://127.0.0.1:5500/edit.html"
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
 
-    if (code) {
+    if (code) {     // Does the URL contain ?code=...
         exchangeCodeForToken(code);
         return;
     }
@@ -35,7 +40,7 @@ window.onload = function () {
         window.location.href === "http://127.0.0.1:5500/index.html" ||
         window.location.href === "http://localhost:5500/";
 
-    if (isLoginPage) {
+    if (isLoginPage) {      // if its not a login page, then user has already logged in, this is how he went to pages different than the loging (through redirectUserByRole)
         redirect_to_login();
     }
 };
@@ -98,15 +103,20 @@ async function exchangeCodeForToken(authCode) {
     }
 }
 
-// =============================
-// Redirect By Role
-// =============================
+// ==========================================================
+// Redirect By Role (as soon as token is confirmed)
+// ==========================================================
 
 function redirectUserByRole(decodedToken) {
+
     if (decodedToken.user_role === "seller") {
+        
         window.location.href = "http://127.0.0.1:5500/edit.html";
+    
     } else if (decodedToken.user_role === "customer") {
+
         window.location.href = "http://127.0.0.1:5500/customer.html";
+    
     } else {
         console.log("User is not authorized or does not have a role.");
     }

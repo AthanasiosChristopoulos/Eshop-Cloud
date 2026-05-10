@@ -1,6 +1,10 @@
+
+## =====================================================================================
 # eShop — Distributed E-Commerce Platform
 
 A containerized, service-oriented e-commerce platform. The system supports two user roles — **customers** and **sellers** — each with their own dedicated views and permissions. Customers can browse products, add items to a cart, and place orders; sellers can manage product listings.
+    - sellers: can visit edit.html (home)
+    - customers: can visit customer.html (home), orders.html, purchase.html
 
 The backend exposes two independent services — a **Products service** (port 5000) and an **Orders service** (port 5001) — communicating asynchronously via **Apache Kafka**. Authentication and role-based access control are handled by **Keycloak** (OpenID Connect), with user roles embedded directly in the JWT token. All services run inside **Docker**, and data is persisted in a **PostgreSQL** database.
 
@@ -28,9 +32,8 @@ npm install
 docker compose up
 ```
 
----
-
-## 2. Configure Keycloak ======================================================================
+## =====================================================================================
+## 2. Configure Keycloak 
 
 Open the Keycloak admin console at **http://localhost:8080**. To login as admin and configure stuff, use:
     - username: admin and password: admin
@@ -78,7 +81,6 @@ This step makes the `user_role` attribute available in the decoded token so the 
 Go to **Clients → frontend-client → Client scopes → frontend-client-dedicated → Configure a new mapper**, and select **User Attribute**:
 
 | Field | Value |
-|---|---|
 | Mapper type | User Attribute |
 | Name | `user_role` |
 | User Attribute | `user_role` |
@@ -100,12 +102,25 @@ What is a Mapper:
  - Take this value from Keycloak → put it into the login token under this name.
  - A token is the signed JSON object Keycloak gives your frontend after login. Your frontend decodes it and reads fields from it.
 
----
+## Login Process explained:
 
+1. When the page loads, it checks the URL for a code.
+2. If there is no code, it sends the user to Keycloak login.
+3. The user logs in through Keycloak.
+4. Keycloak sends the user back to the frontend with a code. (keycloack internals)
+    - to see this, go to devtools, Network tab and find 302 responses
+    - then go to Headers => Headers Response => then Location
+5. The JS code sends that code to Keycloak and asks for a token. (exchangeCodeForToken)
+6. Keycloak returns an access token. (POST request inside exchangeCodeForToken)
+7. Your code decodes the token and saves the user info in localStorage.
+    If the user is a seller, they go to edit.html.
+    If the user is a customer, they go to customer.html.
+8. When the user clicks logout, the saved token is removed and the user is redirected to Keycloak logout.
+
+## =====================================================================================
 ## 3. Access the Application
 
 | Service | URL |
-|---|---|
 | Frontend | http://localhost:5500 |
 | Kafka UI | http://localhost:9021 |
 
@@ -121,25 +136,11 @@ docker compose down
 
 > This does **not** delete your data — it is persisted in Docker volumes.
 
----
-
-## Database Access
+## =====================================================================================
+## Database Access:
 
 To connect to the PostgreSQL database directly via Docker:
 
 ```bash
 docker exec -it product_db psql -U postgres -d products
 ```
-
-## Login Process explained:
-
-1. When the page loads, it checks the URL for a code.
-2. If there is no code, it sends the user to Keycloak login.
-3. The user logs in through Keycloak.
-4. Keycloak sends the user back to your frontend with a code.
-5. Your code sends that code to Keycloak and asks for a token.
-6. Keycloak returns an access token.
-7. Your code decodes the token and saves the user info in localStorage.
-    If the user is a seller, they go to edit.html.
-    If the user is a customer, they go to customer.html.
-8. When the user clicks logout, the saved token is removed and the user is redirected to Keycloak logout.

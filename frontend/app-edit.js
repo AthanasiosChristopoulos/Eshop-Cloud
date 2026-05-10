@@ -1,5 +1,5 @@
 
-const token = localStorage.getItem("decodedToken");
+const token = localStorage.getItem("decodedToken");     // get access token from the localstorage
 const BASE_URL = "http://127.0.0.1:5000/products";
 
 let url = BASE_URL;
