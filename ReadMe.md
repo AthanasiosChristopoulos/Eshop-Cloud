@@ -8,7 +8,7 @@ The backend exposes two independent services — a **Products service** (port 50
 
 ---
 
-# Setup & Run Guide
+# Setup & Run Guide =====================================================
 
 ## Prerequisites
 
@@ -30,9 +30,10 @@ docker compose up
 
 ---
 
-## 2. Configure Keycloak
+## 2. Configure Keycloak    ======================================================================
 
-Open the Keycloak admin console at **http://localhost:8080**.
+Open the Keycloak admin console at **http://localhost:8080**. To login as admin and configure stuff, use:
+    - username: admin and password: admin
 
 ### 2.1 Create a Realm
 
@@ -43,14 +44,12 @@ Create a new realm named `eshop`.
 Go to **Clients → Create client** and fill in:
 
 | Field | Value |
-|---|---|
 | Client type | OpenID Connect |
 | Client ID | `frontend-client` |
 
 Click **Next** twice, then set the following URLs (no trailing slashes):
 
 | Setting | Value |
-|---|---|
 | Root URL | `http://127.0.0.1:5500` |
 | Home URL | `http://127.0.0.1:5500` |
 | Valid redirect URIs | `http://127.0.0.1:5500/*` and `http://localhost:5500/*` |
@@ -69,12 +68,14 @@ Go to **Realm roles → Create Role** and create the following two roles:
 ### 2.4 Create a User Attribute
 
 Go to **Realm settings → User profile → Create Attribute** and create an attribute named `user_role`.
+ - Add a options Validation, either customer or seller
+ - Remove username's validator
 
 ### 2.5 Add a Token Mapper
 
 This step makes the `user_role` attribute available in the decoded token so the frontend can read `decodedToken.user_role`.
 
-Go to **Clients → frontend-client → Client scopes → Mappers → Configure a new mapper**, and select **User Attribute**:
+Go to **Clients → frontend-client → Client scopes → frontend-client-dedicated → Configure a new mapper**, and select **User Attribute**:
 
 | Field | Value |
 |---|---|
@@ -86,11 +87,18 @@ Go to **Clients → frontend-client → Client scopes → Mappers → Configure 
 ### 2.6 Create Users
 
 1. Go to **Users → Create User** and fill in the details.
-2. After creating the user, go to the user's **Credentials** tab and click **Set Password**.
+2. **Set Password**: After creating the user, go to the user's **Credentials** tab and click **Set Password**.
 
 ### 2.7 Set Username Claim
 
-Go to **Clients → frontend-client → Client scopes → profile → Mappers**, find the `username` mapper, and set the claim name to `preferred_username`.
+Go to **Client scopes → profile → Mappers → username**, find the `username` mapper, and set the claim name from `preferred_username` to `username`.
+    - You need to restart the app for this to take effect
+
+## Keycloack theory: 
+
+What is a Mapper:
+ - Take this value from Keycloak → put it into the login token under this name.
+ - A token is the signed JSON object Keycloak gives your frontend after login. Your frontend decodes it and reads fields from it.
 
 ---
 
