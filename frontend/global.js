@@ -54,7 +54,6 @@ function initializeLogoutEventListener(button) {
 // =====================================================================================
 // Modal Handling
 
-
 function showAlertModal(message) {
     openModal(alertModal);
     alertModalBody.innerHTML = message;

@@ -27,10 +27,6 @@ const modal = document.getElementById("modal");
 const ModalHeader = document.getElementById("ModalHeader");
 const ModalBody = document.getElementById("ModalBody");
 
-const alertModal = document.getElementById("alertModal");
-const alertModalBody = document.getElementById("alertModalBody");
-
-const overlay = document.getElementById("overlay");
 const homeButton = document.getElementById("homeButton");
 const searchButton = document.querySelector(".search-button");
 

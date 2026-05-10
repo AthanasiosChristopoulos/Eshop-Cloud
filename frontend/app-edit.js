@@ -14,7 +14,6 @@ const main_modal = document.getElementById("modal");
 const allProductsDiv = document.getElementById("allProducts");
 const ModalHeader = document.getElementById("ModalHeader");
 const ModalBody = document.getElementById("ModalBody");
-const overlay = document.getElementById("overlay");
 const searchButton = document.querySelector(".search-button");
 
 // =============================
