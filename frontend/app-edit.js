@@ -140,7 +140,7 @@ searchButton.addEventListener("click", async () => {
 // =============================
 
 function addProduct() {
-    
+
     ModalHeader.innerHTML = "Add Product";
     openModal(main_modal);
     const { submitButton, quitButton } = initializeProductForm();
@@ -237,7 +237,7 @@ function deleteProduct(id) {
             <p>Are you sure you want to delete the product with id = ${id}?</p>
 
             <div class="buttons">
-                <button data-modal-target="#modal" class="yes-button">Yes</button>
+                <button class="yes-button">Yes</button>
                 <button class="no-button">No</button>
             </div>
         </div>
@@ -248,6 +248,7 @@ function deleteProduct(id) {
     const modal = document.querySelector(yesButton.dataset.modalTarget);
 
     yesButton.addEventListener("click", async () => {
+        openModal(main_modal)
         try {
             const response = await fetch(`${url}/${id}`, {
                 method: "DELETE",
@@ -277,6 +278,7 @@ function deleteProduct(id) {
 // =============================
 
 function initializeProductForm() {
+
     ModalBody.innerHTML = `
     <div id="addProductForm">
 
@@ -366,17 +368,6 @@ function initializeOpenModalEventListeners() {
         button.addEventListener("click", () => {
             const modal = document.querySelector(button.dataset.modalTarget);
             openModal(modal);
-        });
-    });
-}
-
-function initializeCloseModalEventListeners() {
-    const closeModalButtons = document.querySelectorAll("[data-close-button]");
-
-    closeModalButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            const modal = button.closest(".modal");
-            closeModal(modal);
         });
     });
 }
