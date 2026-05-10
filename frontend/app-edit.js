@@ -408,5 +408,4 @@ function closeModal(modal) {
 }
 
 initializeOpenModalEventListeners();
-initializeCloseModalEventListeners();
 initializeOverlayModalEventListeners();

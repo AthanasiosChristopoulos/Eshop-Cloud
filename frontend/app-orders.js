@@ -238,16 +238,6 @@ let initializeOpenModalEventListeners = () => {
     })
 }
 
-let initializeCloseModalEventListeners = () => {
-    const closeModalButtons = document.querySelectorAll('[data-close-button]')
-    closeModalButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const modal = button.closest('.modal')
-            closeModal(modal)
-        })
-    })
-}
-
 let initializeOverlayModalEventListeners = () => {
     overlay.addEventListener('click', () => {
         const modals = document.querySelectorAll('.modal.active')
@@ -258,7 +248,6 @@ let initializeOverlayModalEventListeners = () => {
 }
 
 initializeOpenModalEventListeners();
-initializeCloseModalEventListeners();
 initializeOverlayModalEventListeners();
 
 function openModal(modal) {

@@ -1,3 +1,5 @@
+
+
 function initializeCloseModalEventListeners() {
     const closeModalButtons = document.querySelectorAll(".close-button");
 
@@ -8,3 +10,5 @@ function initializeCloseModalEventListeners() {
         });
     });
 }
+
+initializeCloseModalEventListeners();
