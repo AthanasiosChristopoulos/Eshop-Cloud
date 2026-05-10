@@ -20,11 +20,6 @@ const modal = document.getElementById("modal");
 const ModalHeader = document.getElementById("ModalHeader");
 const ModalBody = document.getElementById("ModalBody");
 
-const alertModal = document.getElementById("alertModal");
-const alertModalBody = document.getElementById("alertModalBody");
-
-const overlay = document.getElementById("overlay");
-
 // =====================================================================================
 // Page Load
 
@@ -60,20 +55,8 @@ function showWrongRoleModal() {
     const goBackButton = document.getElementById("go_back");
     const logoutButton = document.getElementById("logout");
 
-    initializeGoBackButtonEventListener(goBackButton);
+    initializeRedirectToLoginEventListener(goBackButton);
     initializeLogoutEventListener(logoutButton);
-}
-
-function initializeGoBackButtonEventListener(button) {
-    button.addEventListener("click", () => {
-        redirect_to_login();
-    });
-}
-
-function initializeLogoutEventListener(button) {
-    button.addEventListener("click", () => {
-        logout();
-    });
 }
 
 // =====================================================================================
@@ -117,6 +100,7 @@ searchButton.addEventListener("click", async () => {
         const orders = await response.json();
 
         renderOrders(orders);
+
     } catch (error) {
         console.log("Error:", error);
     }
@@ -213,41 +197,11 @@ function initializeDeleteOrderButtonEventListener(button, id) {
 
             closeModal(modal);
             location.reload();
+
         } catch (error) {
             console.error("Error:", error);
             showAlertModal("Error deleting order.");
         }
     });
-}
-
-// =====================================================================================
-// Modal Handling
-
-function showAlertModal(message) {
-    openModal(alertModal);
-    alertModalBody.innerHTML = message;
-}
-
-function openModal(targetModal) {
-    if (!targetModal) {
-        return;
-    }
-
-    targetModal.classList.add("active");
-    overlay.classList.add("active");
-}
-
-function closeModal(targetModal) {
-    if (!targetModal) {
-        return;
-    }
-
-    targetModal.classList.remove("active");
-
-    const activeModals = document.querySelectorAll(".modal.active");
-
-    if (activeModals.length === 0) {
-        overlay.classList.remove("active");
-    }
 }
 

@@ -172,7 +172,7 @@ function addProduct() {
         }
     });
 
-    initializeNoButtonEventListener(main_modal, quitButton);
+    initializeCloseModalEventListener(main_modal, quitButton);
 }
 
 // =============================
@@ -218,7 +218,7 @@ function updateProduct(id) {
         }
     });
 
-    initializeNoButtonEventListener(main_modal, quitButton);
+    initializeCloseModalEventListener(main_modal, quitButton);
 }
 
 // =============================
@@ -268,7 +268,7 @@ function deleteProduct(id) {
         }
     });
 
-    initializeNoButtonEventListener(modal, noButton);
+    initializeCloseModalEventListener(modal, noButton);
 }
 
 // =============================
@@ -342,44 +342,4 @@ function validateProductData(productData, requireAllFields) {
     }
 
     return true;
-}
-
-// =============================
-// Alert Modal
-// =============================
-
-function showAlertModal(message) {
-    const alertModal = document.getElementById("alertModal");
-
-    openModal(alertModal);
-    alertModalBody.innerHTML = message;
-}
-
-// =============================
-// Modal Handling
-// =============================
-
-function initializeNoButtonEventListener(modal, button) {
-    button.addEventListener("click", () => {
-        closeModal(modal);
-    });
-}
-
-function openModal(modal) {
-    if (!modal) return;
-
-    modal.classList.add("active");
-    overlay.classList.add("active");
-}
-
-function closeModal(modal) {
-    if (!modal) return;
-
-    modal.classList.remove("active");
-
-    const activeModals = document.querySelectorAll(".modal.active");
-
-    if (activeModals.length === 0) {
-        overlay.classList.remove("active");
-    }
 }

@@ -109,7 +109,7 @@ body {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(0);
+    transform: translate(-50%, -50%) scale(0);  /* modal exists but scaled to 0 so it doesnt appear */
     transition: 200ms ease-in-out;
     border: 1px solid black;
     border-radius: 10px;
@@ -121,6 +121,7 @@ body {
 .modal.active {
     transform: translate(-50%, -50%) scale(1);
 }
+/* “If the element has BOTH classes: modal AND active then scale it to normal size.” */
 
 .modal-header {
     padding: 10px 15px;

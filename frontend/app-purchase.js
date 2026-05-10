@@ -71,20 +71,8 @@ function showWrongRoleModal() {
     const goBackButton = document.getElementById("go_back");
     const logoutButton = document.getElementById("logout");
 
-    initializeGoBackButtonEventListener(goBackButton);
+    initializeRedirectToLoginEventListener(goBackButton);
     initializeLogoutEventListener(logoutButton);
-}
-
-function initializeGoBackButtonEventListener(button) {
-    button.addEventListener("click", () => {
-        redirect_to_login();
-    });
-}
-
-function initializeLogoutEventListener(button) {
-    button.addEventListener("click", () => {
-        logout();
-    });
 }
 
 // =====================================================================================
@@ -386,35 +374,3 @@ function initializePurchaseButtonEventListener(button, totalOrderPrice) {
         }
     });
 }
-
-// =====================================================================================
-// Modal Handling
-
-function showAlertModal(message) {
-    openModal(alertModal);
-    alertModalBody.innerHTML = message;
-}
-
-function openModal(modal) {
-    if (!modal) {
-        return;
-    }
-
-    modal.classList.add("active");
-    overlay.classList.add("active");
-}
-
-function closeModal(modal) {
-    if (!modal) {
-        return;
-    }
-
-    modal.classList.remove("active");
-
-    const activeModals = document.querySelectorAll(".modal.active");
-
-    if (activeModals.length === 0) {
-        overlay.classList.remove("active");
-    }
-}
-
