@@ -238,17 +238,7 @@ let initializeOpenModalEventListeners = () => {
     })
 }
 
-let initializeOverlayModalEventListeners = () => {
-    overlay.addEventListener('click', () => {
-        const modals = document.querySelectorAll('.modal.active')
-        modals.forEach(modal => {
-            closeModal(modal)
-        })
-    })
-}
-
 initializeOpenModalEventListeners();
-initializeOverlayModalEventListeners();
 
 function openModal(modal) {
     if (modal == null) {

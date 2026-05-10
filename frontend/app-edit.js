@@ -372,16 +372,6 @@ function initializeOpenModalEventListeners() {
     });
 }
 
-function initializeOverlayModalEventListeners() {
-    overlay.addEventListener("click", () => {
-        const activeModals = document.querySelectorAll(".modal.active");
-
-        activeModals.forEach(modal => {
-            closeModal(modal);
-        });
-    });
-}
-
 function initializeNoButtonEventListener(modal, button) {
     button.addEventListener("click", () => {
         closeModal(modal);
@@ -408,4 +398,3 @@ function closeModal(modal) {
 }
 
 initializeOpenModalEventListeners();
-initializeOverlayModalEventListeners();

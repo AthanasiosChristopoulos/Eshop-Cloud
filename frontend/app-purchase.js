@@ -1,543 +1,436 @@
-
-// import { PORT_products, PORT_orders } from '../config.js';
-
-
-// const url = `http://127.0.0.1:${PORT_products}/products`;
-
-url = `http://127.0.0.1:5000/products`;
-url_orders = `http://127.0.0.1:5001/orders`;
-url_All = `http://127.0.0.1:5000/products/allUsers`;
+let url = "http://127.0.0.1:5000/products";
+let url_orders = "http://127.0.0.1:5001/orders";
+const url_All = "http://127.0.0.1:5000/products/allUsers";
 
 const token = localStorage.getItem("decodedToken");
+const decodedToken = token ? JSON.parse(token) : null;
 
-let initializeGoBackButtonEventListener = (go_back_button) => {
-  go_back_button.addEventListener('click', async () => {
-    redirect_to_login();
-  });
-}
-let initializeLogoutEventListener = (logout_button) => {
-  logout_button.addEventListener('click', async () => {
-    logout();
-  });
-}
+if (decodedToken) {
+    const username = decodedToken.username;
 
-if (token) {
-  const username = JSON.parse(token).username;
-  url = `http://127.0.0.1:5000/products/${username}`;
-  url_orders = `http://127.0.0.1:5001/orders/${username}`;
-} else{
+    url = `http://127.0.0.1:5000/products/${username}`;
+    url_orders = `http://127.0.0.1:5001/orders/${username}`;
+} else {
     console.log("No token");
 }
+
 console.log(url);
 console.log(url_orders);
 
+// =====================================================================================
+// DOM Elements
 
 const allProductsDiv = document.getElementById("allProducts");
+const cartButton = document.getElementById("cart1");
 
-const purchaseButton = document.getElementById("cart1"); 
-
-const modal = document.getElementById("modal"); 
+const modal = document.getElementById("modal");
 const ModalHeader = document.getElementById("ModalHeader");
-const ModalBody = document.getElementById("ModalBody"); 
+const ModalBody = document.getElementById("ModalBody");
+
+const alertModal = document.getElementById("alertModal");
+const alertModalBody = document.getElementById("alertModalBody");
+
+const overlay = document.getElementById("overlay");
+const homeButton = document.getElementById("homeButton");
+const searchButton = document.querySelector(".search-button");
 
 let basket = JSON.parse(localStorage.getItem("data")) || [];
 
-
 // =====================================================================================
-// =====================================================================================
+// Page Load
 
 document.addEventListener("DOMContentLoaded", async () => {
-
-  try {
-      if(JSON.parse(token).user_role != 'customer'){
-        
-        openModal(modal);
-
-        ModalHeader.innerHTML = "Wrong User Role";
-        ModalBody.innerHTML = '';
-
-        const content = `
-            <div class="buttons">
-              <button class="submit-button" style="margin-top: 10px; margin-right: 5px;" id="go_back">Go Back</button>
-              <button class="quit-button" id="logout">Logout</button>
-            </div>
-        `;
-        ModalBody.innerHTML += content;
-
-        const go_back_button = document.getElementById("go_back");
-        const logout_button = document.getElementById("logout");
-      
-        initializeGoBackButtonEventListener(go_back_button);
-        initializeLogoutEventListener(logout_button);
-      }
-  } catch (error) {
-    console.log("Error: ", error);
-  }
-
-  try {
-
-    const response = await fetch(url_All);
-
-    if (response.ok) {
-
-      const products = await response.json();
-
-      putProductDivs(products);
-
-      initializeOpenModalEventListeners();
-
-    } else {
-      console.error("Error fetching products");
-    }
-  } catch (e) {
-    console.log("Error:", e);
-  }
+    checkUserRole();
+    await loadAllProducts();
 });
 
 // =====================================================================================
-// =====================================================================================
-// Get Product By Id
+// User Role
 
-const searchButton = document.querySelector('.search-button')
-
-searchButton.addEventListener("click", async () => {
-
-  const searchValue = document.getElementById("idSearch").value;
-
-  if (searchValue){
-
+function checkUserRole() {
     try {
-      const response = await fetch(`${url_All}/${searchValue}`);
-  
-      if (response.ok) {
-        
-        const products = await response.json();
-        allProductsDiv.innerHTML = ``;
-
-        putProductDivs(products);
-        initializeOpenModalEventListeners();
-  
-      } else {
-        showAlertModal("Product not found.");
-      }
-    } catch (e) {
-      console.log("Error:", e);
-    }
-  }
-  else{
-    location.reload(); 
-
-  }
-
-});
-
-
-// =====================================================================================
-// =====================================================================================
-
-let putProductDivs = (products) => {
-
-    allProductsDiv.innerHTML = ''; 
-  
-    products.forEach((x) => {
-
-      // In case there is id/title search
-      let search = basket.find((purchaseProduct) => purchaseProduct.id === x.id) || [];
-      let amountOfProducts = search.amount || 0;
-
-      if(x.quantity == 0){
-        return;
-      }
-
-      const productContent = `
-      <div class="product">
-
-        <img src="${x.img}" class="image"/>
-
-        <div class="content">
-          <p>Title: ${x.title}</p>
-          <p>Price: $${x.price}</p>
-          <p>Quantity: ${x.quantity}</p>
-  
-          <div class="amountButtons">
-              <i onclick="decrement(${x.id})" class="bi bi-dash-lg"></i>  
-              <div id=${x.id} class="quantity">${amountOfProducts}</div>
-              <i onclick="increment(${x.id}, '${x.title}', ${x.price} )" class="bi bi-plus-lg"></i>
-          </div>
-
-        </div>      
-      </div>
-      `;
-      allProductsDiv.innerHTML += productContent;
-    });
-  }
-
-// =====================================================================================
-// =====================================================================================
-  
-let increment = async (id, title, price) => {
-
-  try {
-    console.log(url_All);
-    const response = await fetch(`${url_All}/${id}`);
-
-    if (response.ok) {
-
-      const productArray = await response.json(); 
-      const product = productArray[0]; 
-
-      const {quantity} = product;
-
-      let search = basket.find((x) => x.id === id);
-
-      if (search === undefined) {
-        if (quantity > 0) {  
-          basket.push({
-            id: id,
-            amount: 1,
-            title: title,
-            price: price,
-          });
-          update(id);
-          localStorage.setItem("data", JSON.stringify(basket));
-          localStorage.setItem('testKey', 'sss');
-
-        } else {
-          showAlertModal('This product is out of stock!');
+        if (!decodedToken || decodedToken.user_role !== "customer") {
+            showWrongRoleModal();
         }
-      } else {
-
-        search.amount += 1;
-        update(id);
-        localStorage.setItem("data", JSON.stringify(basket));
-
-
-      }
-    } else {
-      showAlertModal("Product Id not found.");
+    } catch (error) {
+        console.log("Error:", error);
     }
+}
 
-  } catch (e) {
-    console.log("Error fetching product data:", e);
-  }
-};
+function showWrongRoleModal() {
+    openModal(modal);
 
-// =====================================================================================
-// =====================================================================================
+    ModalHeader.innerHTML = "Wrong User Role";
+    ModalBody.innerHTML = `
+        <div class="buttons">
+            <button class="submit-button" style="margin-top: 10px; margin-right: 5px;" id="go_back">Go Back</button>
+            <button class="quit-button" id="logout">Logout</button>
+        </div>
+    `;
 
-let decrement = async (id) => {
-  let search = basket.find((x) => x.id === id);
+    const goBackButton = document.getElementById("go_back");
+    const logoutButton = document.getElementById("logout");
 
-  if (search === undefined || search.amount === 0) {
-    return;
-  } else {
-    search.amount -= 1;
-    update(id); 
+    initializeGoBackButtonEventListener(goBackButton);
+    initializeLogoutEventListener(logoutButton);
+}
 
-    // If no more products are in the cart, remove the item from the basket
-    basket = basket.filter((x) => x.amount !== 0);
-    localStorage.setItem("data", JSON.stringify(basket));
-  }
-};
+function initializeGoBackButtonEventListener(button) {
+    button.addEventListener("click", () => {
+        redirect_to_login();
+    });
+}
 
-// =====================================================================================
-// =====================================================================================
-
-
-// =====================================================================================
-// =====================================================================================
-
-let update = (id) => {
-
-  let search = basket.find((x) => x.id === id);
-  document.getElementById(id).innerHTML = search.amount;
-
-  calculation();
-};
-
-// =====================================================================================
-// =====================================================================================
-
-let calculation = () => {
-
-  let cartIcon = document.getElementById("cartAmount");
-  cartIcon.innerHTML = basket.map((x) => x.amount).reduce((x, y) => x + y, 0);
-};
-
-calculation();
-
-
-
-// =====================================================================================
-// =====================================================================================
-
-let showAlertModal = (str) => {
-
-  const alertModal = document.getElementById('alertModal')
-
-  openModal(alertModal)
-  alertModalBody.innerHTML = str
-
-  return
+function initializeLogoutEventListener(button) {
+    button.addEventListener("click", () => {
+        logout();
+    });
 }
 
 // =====================================================================================
+// Products
+
+async function loadAllProducts() {
+    try {
+        const response = await fetch(url_All);
+
+        if (!response.ok) {
+            console.error("Error fetching products");
+            return;
+        }
+
+        const products = await response.json();
+
+        renderProducts(products);
+        initializeOpenModalEventListeners();
+    } catch (error) {
+        console.log("Error:", error);
+    }
+}
+
+searchButton.addEventListener("click", async () => {
+    const searchValue = document.getElementById("idSearch").value;
+
+    if (!searchValue) {
+        location.reload();
+        return;
+    }
+
+    try {
+        const response = await fetch(`${url_All}/${searchValue}`);
+
+        if (!response.ok) {
+            showAlertModal("Product not found.");
+            return;
+        }
+
+        const products = await response.json();
+
+        renderProducts(products);
+        initializeOpenModalEventListeners();
+    } catch (error) {
+        console.log("Error:", error);
+    }
+});
+
+function renderProducts(products) {
+    allProductsDiv.innerHTML = "";
+
+    products.forEach((product) => {
+        if (product.quantity === 0) {
+            return;
+        }
+
+        const basketItem = basket.find((item) => item.id === product.id);
+        const amountOfProducts = basketItem ? basketItem.amount : 0;
+
+        const productContent = `
+            <div class="product">
+                <img src="${product.img}" class="image"/>
+
+                <div class="content">
+                    <p>Title: ${product.title}</p>
+                    <p>Price: $${product.price}</p>
+                    <p>Quantity: ${product.quantity}</p>
+
+                    <div class="amountButtons">
+                        <i onclick="decrement(${product.id})" class="bi bi-dash-lg"></i>
+                        <div id="${product.id}" class="quantity">${amountOfProducts}</div>
+                        <i onclick="increment(${product.id}, '${product.title}', ${product.price})" class="bi bi-plus-lg"></i>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        allProductsDiv.innerHTML += productContent;
+    });
+}
+
+// =====================================================================================
+// Basket
+
+async function increment(id, title, price) {
+    try {
+        const response = await fetch(`${url_All}/${id}`);
+
+        if (!response.ok) {
+            showAlertModal("Product Id not found.");
+            return;
+        }
+
+        const productArray = await response.json();
+        const product = productArray[0];
+
+        const basketItem = basket.find((item) => item.id === id);
+
+        if (!basketItem) {
+            if (product.quantity <= 0) {
+                showAlertModal("This product is out of stock!");
+                return;
+            }
+
+            basket.push({
+                id,
+                amount: 1,
+                title,
+                price,
+            });
+        } else {
+            basketItem.amount += 1;
+        }
+
+        updateBasketItem(id);
+        saveBasket();
+    } catch (error) {
+        console.log("Error fetching product data:", error);
+    }
+}
+
+async function decrement(id) {
+    const basketItem = basket.find((item) => item.id === id);
+
+    if (!basketItem || basketItem.amount === 0) {
+        return;
+    }
+
+    basketItem.amount -= 1;
+
+    updateBasketItem(id);
+
+    basket = basket.filter((item) => item.amount !== 0);
+
+    saveBasket();
+}
+
+function updateBasketItem(id) {
+    const basketItem = basket.find((item) => item.id === id);
+
+    if (basketItem) {
+        document.getElementById(id).innerHTML = basketItem.amount;
+    }
+
+    updateCartAmount();
+}
+
+function updateCartAmount() {
+    const cartIcon = document.getElementById("cartAmount");
+
+    cartIcon.innerHTML = basket
+        .map((item) => item.amount)
+        .reduce((total, amount) => total + amount, 0);
+}
+
+function saveBasket() {
+    localStorage.setItem("data", JSON.stringify(basket));
+}
+
+updateCartAmount();
+
 // =====================================================================================
 // Home Button
 
-const homeButton = document.getElementById('homeButton');
+homeButton.addEventListener("click", () => {
+    if (basket.length === 0) {
+        localStorage.removeItem("data");
+        window.location.href = "customer.html";
+        return;
+    }
 
-homeButton.addEventListener('click', async () => {
-
-  if(basket.length === 0) {
-    // localStorage.clear();
-    localStorage.removeItem("data");
-
-    window.location.href = 'customer.html';
-
-  }
-  else{
-
-    ModalHeader.innerHTML = "Leave Shopping";
-    ModalBody.innerHTML = `
-  
-    <div class="yesNoBody">
-      <p>Are you sure you want to leave the site ? All your shopping progress will be lost</p>
-      <div class="buttons">
-        <button class="yes-button">Yes</button>
-        <button class="no-button">No</button>
-      </div>
-    </div>
-    `;
-  
-    // const modal = document.getElementById('modal');
-  
-    const yesButton = document.querySelector('.yes-button')
-    const noButton = document.querySelector('.no-button');
-  
-    initializeYesButtonEventListener(modal,yesButton);
-    initializeNoButtonEventListener(modal, noButton);
-  }
-
+    showLeaveShoppingModal();
 });
 
-let initializeYesButtonEventListener = (modal, button) => {
+function showLeaveShoppingModal() {
+    ModalHeader.innerHTML = "Leave Shopping";
+    ModalBody.innerHTML = `
+        <div class="yesNoBody">
+            <p>Are you sure you want to leave the site? All your shopping progress will be lost.</p>
 
-  button.addEventListener('click', async () => {
-    closeModal(modal); 
-    // localStorage.clear();
-    localStorage.removeItem("data");
+            <div class="buttons">
+                <button class="yes-button">Yes</button>
+                <button class="no-button">No</button>
+            </div>
+        </div>
+    `;
 
-    window.location.href = 'customer.html';
+    openModal(modal);
 
-  });
-};
+    const yesButton = document.querySelector(".yes-button");
+    const noButton = document.querySelector(".no-button");
 
-let initializeNoButtonEventListener = (modal, button) => {
+    initializeYesButtonEventListener(yesButton);
+    initializeCloseModalEventListener(modal, noButton);
+}
 
-  button.addEventListener('click', () => {
-    closeModal(modal); 
-    
-  });
-};
+function initializeYesButtonEventListener(button) {
+    button.addEventListener("click", () => {
+        closeModal(modal);
 
-// =====================================================================================
+        localStorage.removeItem("data");
+
+        window.location.href = "customer.html";
+    });
+}
+
 // =====================================================================================
 // Purchase
 
-purchaseButton.addEventListener('click', async () => {
-
-  if( basket.length === 0 ){
-    showAlertModal("You havent purchased anything")
-  }
-  else {
-
-    openModal(modal)
-    ModalHeader.innerHTML = "Confirm your Purchase";
-    ModalBody.innerHTML = ''; 
-
-    let total_order_price = 0;
-
-
-
-  basket.forEach((x) => {
-      total_order_price += x.price * x.amount;
-
-      const basketContent = `
-      <div class="productOrder">
-          <i class="bi bi-bag-check"></i>
-          <p>${x.title}: $${x.price} x ${x.amount}</p>
-      </div>
-      `;
-      ModalBody.innerHTML += basketContent;
-  });
-
-
-  const basketContent = `
-  <div class="totalPrice">
-      <p class="totalPriceHeader">Total Price:</p>
-      <p>$${total_order_price}</p>
-
-      <div class="buttons">
-        <button class="submit-button" style="margin-top: 10px; margin-right: 5px;" id="purchaseButton">Purchase</button>
-        <button class="quit-button">Cancel</button>
-      </div>
-  </div>
-  `;
-  ModalBody.innerHTML += basketContent;
-
-  const purchaseButton = document.getElementById("purchaseButton");
-  const quitButton = document.querySelector('.quit-button');
-
-  initializePurchaseButtonEventListener(purchaseButton, total_order_price);
-  initializeNoButtonEventListener(modal, quitButton);
-  
-  }
-});
-
-// =====================================================================================
-// =====================================================================================
-
-let initializePurchaseButtonEventListener = (purchaseButton, total_order_price) => {
-
-purchaseButton.addEventListener('click', async () => {
-
-  const products = basket.map((x) => ({
-    title: x.title,
-    amount: x.amount,
-    product_id: x.id   
-  }));
-
-  let status = "Pending";
-  let total_price = total_order_price;
-
-  const productData = { products, total_price, status };
-
-  try {
-    const response = await fetch(url_orders, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(productData)
-    });
-
-    const responseData = await response.json(); 
-
-    if (response.ok) {
-
-      // await updateProductQuantities(products);
-
-      closeModal(modal);
-      // localStorage.clear();
-      localStorage.removeItem("data");
-
-      location.reload(); 
-
-    } else if(responseData.error) {
-      showAlertModal(responseData.error || "Error adding product. Please try again.");
-    } else {
-      showAlertModal("Error adding product. Please try again.");
+cartButton.addEventListener("click", () => {
+    if (basket.length === 0) {
+        showAlertModal("You haven't purchased anything.");
+        return;
     }
 
-  } catch (error) {
-    console.error("Error:", error);
-    showAlertModal("Error");
-  }
+    showPurchaseModal();
 });
-};
 
-// =====================================================================================
-// =====================================================================================
-// update Request for products
-// let updateProductQuantities = async (products) => {
+function showPurchaseModal() {
+    openModal(modal);
 
-// try {
+    ModalHeader.innerHTML = "Confirm your Purchase";
+    ModalBody.innerHTML = "";
 
-//   for (const product of products) {
-//     console.log(`${url_All}/${product.product_id}`);
-//     const response = await fetch(`${url_All}/${product.product_id}`);
-//     if (response.ok) {
-//       const productDataArray = await response.json();
-//       const productData = productDataArray[0]; 
+    let totalOrderPrice = 0;
 
-//       const newQuantity = productData.quantity - product.amount;
+    basket.forEach((item) => {
+        totalOrderPrice += item.price * item.amount;
 
-//       await fetch(`${url_All}/${product.product_id}`, {
-//         method: 'PUT',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ quantity: newQuantity }),
-//       });
+        ModalBody.innerHTML += `
+            <div class="productOrder">
+                <i class="bi bi-bag-check"></i>
+                <p>${item.title}: $${item.price} x ${item.amount}</p>
+            </div>
+        `;
+    });
 
-//       console.log(`Updated product ${product.title} stock to ${newQuantity}`);
-//     } else {
-//       console.error(`Failed to fetch product with ID ${product.product_id}`);
-//     }
-//   }
-// } catch (error) {
-//   console.error("Error updating product quantities:", error);
-// }
-// };
+    ModalBody.innerHTML += `
+        <div class="totalPrice">
+            <p class="totalPriceHeader">Total Price:</p>
+            <p>$${totalOrderPrice}</p>
 
+            <div class="buttons">
+                <button class="submit-button" style="margin-top: 10px; margin-right: 5px;" id="confirmPurchaseButton">Purchase</button>
+                <button class="quit-button">Cancel</button>
+            </div>
+        </div>
+    `;
 
+    const confirmPurchaseButton = document.getElementById("confirmPurchaseButton");
+    const cancelPurchaseButton = document.querySelector(".quit-button");
 
-// =====================================================================================
-// =====================================================================================
-// Modal handling
-
-const alertModalBody = document.getElementById("alertModalBody");
-
-const overlay = document.getElementById("overlay")
-
-
-let initializeOpenModalEventListeners = () => {
-  const openModalButtons = document.querySelectorAll('[data-modal-target]')
-  openModalButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const modal = document.querySelector(button.dataset.modalTarget)
-      openModal(modal)
-    })
-  })
+    initializePurchaseButtonEventListener(confirmPurchaseButton, totalOrderPrice);
+    initializeCloseModalEventListener(modal, cancelPurchaseButton);
 }
 
-let initializeOverlayModalEventListeners = () => {
-  overlay.addEventListener('click', () => {
-    const modals = document.querySelectorAll('.modal.active')
-    modals.forEach(modal => {
-      closeModal(modal)
-    })
-  })
+function initializePurchaseButtonEventListener(button, totalOrderPrice) {
+    button.addEventListener("click", async () => {
+        const products = basket.map((item) => ({
+            title: item.title,
+            amount: item.amount,
+            product_id: item.id,
+        }));
+
+        const orderData = {
+            products,
+            total_price: totalOrderPrice,
+            status: "Pending",
+        };
+
+        try {
+            const response = await fetch(url_orders, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(orderData),
+            });
+
+            const responseData = await response.json();
+
+            if (response.ok) {
+                closeModal(modal);
+                localStorage.removeItem("data");
+                location.reload();
+                return;
+            }
+
+            if (responseData.error) {
+                showAlertModal(responseData.error);
+            } else {
+                showAlertModal("Error adding product. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            showAlertModal("Error");
+        }
+    });
 }
 
-initializeOpenModalEventListeners();
-initializeOverlayModalEventListeners();
+// =====================================================================================
+// Modal Handling
+
+function showAlertModal(message) {
+    openModal(alertModal);
+    alertModalBody.innerHTML = message;
+}
+
+function initializeOpenModalEventListeners() {
+    const openModalButtons = document.querySelectorAll("[data-modal-target]");
+
+    openModalButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const modal = document.querySelector(button.dataset.modalTarget);
+            openModal(modal);
+        });
+    });
+}
+
+function initializeCloseModalEventListener(modal, button) {
+    button.addEventListener("click", () => {
+        closeModal(modal);
+    });
+}
 
 function openModal(modal) {
-  if (modal == null) {
-    return
-  }
+    if (!modal) {
+        return;
+    }
 
-  modal.classList.add('active')
-  overlay.classList.add('active')
+    modal.classList.add("active");
+    overlay.classList.add("active");
 }
 
 function closeModal(modal) {
+    if (!modal) {
+        return;
+    }
 
-  if (modal == null) {
-    return
-  }  
+    modal.classList.remove("active");
 
-  modal.classList.remove('active')
-  const activeModals = document.querySelectorAll('.modal.active');
-  
-  if (activeModals.length === 0) {
-    overlay.classList.remove('active');
-  }
+    const activeModals = document.querySelectorAll(".modal.active");
 
+    if (activeModals.length === 0) {
+        overlay.classList.remove("active");
+    }
 }
 
-// =====================================================================================
-// =====================================================================================
-
+initializeOpenModalEventListeners();
