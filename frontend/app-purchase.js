@@ -102,7 +102,7 @@ async function loadAllProducts() {
         const products = await response.json();
 
         renderProducts(products);
-        initializeOpenModalEventListeners();
+
     } catch (error) {
         console.log("Error:", error);
     }
@@ -127,7 +127,7 @@ searchButton.addEventListener("click", async () => {
         const products = await response.json();
 
         renderProducts(products);
-        initializeOpenModalEventListeners();
+
     } catch (error) {
         console.log("Error:", error);
     }
@@ -395,17 +395,6 @@ function showAlertModal(message) {
     alertModalBody.innerHTML = message;
 }
 
-function initializeOpenModalEventListeners() {
-    const openModalButtons = document.querySelectorAll("[data-modal-target]");
-
-    openModalButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            const modal = document.querySelector(button.dataset.modalTarget);
-            openModal(modal);
-        });
-    });
-}
-
 function openModal(modal) {
     if (!modal) {
         return;
@@ -429,4 +418,3 @@ function closeModal(modal) {
     }
 }
 
-initializeOpenModalEventListeners();

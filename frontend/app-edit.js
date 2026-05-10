@@ -80,7 +80,6 @@ async function loadProducts() {
         `;
 
         displayProducts(products);
-        initializeOpenModalEventListeners();
 
     } catch (error) {
         console.error("Error:", error);
@@ -128,7 +127,6 @@ searchButton.addEventListener("click", async () => {
 
         allProductsDiv.innerHTML = "";
         displayProducts(products);
-        initializeOpenModalEventListeners();
 
     } catch (error) {
         console.error("Error:", error);
