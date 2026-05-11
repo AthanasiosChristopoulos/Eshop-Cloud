@@ -7,9 +7,9 @@ const decodedToken = token ? JSON.parse(token) : null;
 
 if (decodedToken) {
     const username = decodedToken.username;
-
     url = `http://127.0.0.1:5000/products/${username}`;
     url_orders = `http://127.0.0.1:5001/orders/${username}`;
+
 } else {
     console.log("No token");
 }
@@ -163,7 +163,7 @@ async function increment(id, title, price) {
         }
 
         const productArray = await response.json();
-        const product = productArray[0];
+        const product = productArray[0];    // array unwrapping, this should only be one either way
 
         const basketItem = basket.find((item) => item.id === id);
 
@@ -200,9 +200,7 @@ async function decrement(id) {
     basketItem.amount -= 1;
 
     updateBasketItem(id);
-
     basket = basket.filter((item) => item.amount !== 0);
-
     saveBasket();
 }
 
@@ -211,15 +209,16 @@ function updateBasketItem(id) {
 
     if (basketItem) {
         document.getElementById(id).innerHTML = basketItem.amount;
+        // remember: <div id="${product.id}" class="quantity">${amountOfProducts}</div>
     }
 
     updateCartAmount();
 }
 
 function updateCartAmount() {
-    const cartIcon = document.getElementById("cartAmount");
+    const cartAmoutIcon = document.getElementById("cartAmount");
 
-    cartIcon.innerHTML = basket
+    cartAmoutIcon.innerHTML = basket
         .map((item) => item.amount)
         .reduce((total, amount) => total + amount, 0);
 }
