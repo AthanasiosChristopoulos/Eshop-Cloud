@@ -153,4 +153,8 @@ Use:
 ```bash
 docker logs -f order_service    # to debug the backend services running in docker
     # Again use console.log( ... ) for printing 
- ```
+```
+
+## Kafka =======================================================
+
+There are 2 topics: productsProducer and ordersProducer.

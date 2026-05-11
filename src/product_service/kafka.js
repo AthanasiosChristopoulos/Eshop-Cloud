@@ -11,13 +11,14 @@ const kafka = new Kafka({
     }
 })
 
+// Producer ========================================================================
+
 const producer = kafka.producer({
     allowAutoTopicCreation: true,
     createPartitioner: Partitioners.LegacyPartitioner
 })
 
 const admin = kafka.admin();
-
 
 // Function to ensure the topic exists
 const ensureTopicExists = async (topic) => {
@@ -54,14 +55,15 @@ const sendOrders = async (msg) => {
         }]
     })
 
-    await producer.disconnect()
+    await producer.disconnect()     // this is why you always have to connect again
 }
+
+// Consumer ========================================================================
 
 const consumer = kafka.consumer({
     groupId: "products-group",
     allowAutoTopicCreation: true,
 })
-
 
 const fetchProductsFromOrderTopic = async () => {
     try {

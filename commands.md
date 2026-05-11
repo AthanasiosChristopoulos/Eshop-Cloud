@@ -7,7 +7,7 @@ Local Kafka:
 .\kafka-topics.bat --create --bootstrap-server localhost:9092 --topic ordersProducer
 .\kafka-topics.bat --delete --bootstrap-server localhost:9092 --topic ordersProducer
 
-=================================================================================================================
+=========================================================================================
 
 Docker:
 docker compose up

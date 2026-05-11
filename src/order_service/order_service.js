@@ -1,6 +1,6 @@
 
 const pool = require('./dataBaseOrders'); 
-const kafka = require('./kafka');
+const sendOrders = require('./kafka');
 const  kafka_product  = require('../product_service/kafka');
 
 // =====================================================================================
@@ -47,7 +47,7 @@ const getOrderById = async (req, res) => {
 // Add an order
 
 const addOrder = async (req, res) => {
-    
+
     const { products, total_price, status } = req.body;
     const username = req.params.username;  
 
@@ -80,11 +80,9 @@ const addOrder = async (req, res) => {
                 };
 
                 try {
-                    await kafka.kafkaProducer(msg);
+                    await sendOrders(msg);
                     
                     console.log("VVVVVV sent to Kafka:", msg);
-
-                    // await kafka_product.kafkaConsumer();
 
                 } catch (kafkaError) {
                     console.error("Error sending to Kafka:", kafkaError.message);
@@ -94,6 +92,7 @@ const addOrder = async (req, res) => {
                 return res.status(201).json({ message: "Order created successfully", order: insertedOrder });
             }
         });
+
     } catch (error) {
         console.error("Unexpected error:", error);
         return res.status(500).send("Unexpected error occurred while creating the order");
