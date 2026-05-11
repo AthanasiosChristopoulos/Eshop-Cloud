@@ -44,12 +44,12 @@ const ensureTopicExists = async (topic) => {
     }
 };
 
-const sendOrders = async (msg) => {
-    await ensureTopicExists('productsProducer'); // Ensure the topic exists before sending
+const sendConfirmation = async (msg) => {
+    await ensureTopicExists('ordersConfirmation'); // Ensure the topic exists before sending
 
     await producer.connect()
     await producer.send({
-        topic: 'productsProducer',
+        topic: 'ordersConfirmation',
         messages: [{
             value: JSON.stringify(msg)
         }]
@@ -68,7 +68,7 @@ const consumer = kafka.consumer({
 const fetchProductsFromOrderTopic = async () => {
     try {
         await consumer.connect()
-        await consumer.subscribe({ topics: ["ordersProducer"] })
+        await consumer.subscribe({ topics: ["ordersTopic"] })
 
         await consumer.run({
             eachMessage: async ({ message }) => {
@@ -77,12 +77,12 @@ const fetchProductsFromOrderTopic = async () => {
 
                 if (result) {
                     msg = { id: jsonMsg.id, acceptReject: "Accepted" }
-                    await sendOrders(msg)
+                    await sendConfirmation(msg)
                 }
 
                 if (!result) {
                     msg = { id: jsonMsg.id, acceptReject: "Rejected" }
-                    await sendOrders(msg)
+                    await sendConfirmation(msg)
 
                 }
 
@@ -97,7 +97,7 @@ const fetchProductsFromOrderTopic = async () => {
 
 setTimeout(async () => {
     try {
-        await fetchProductsFromOrderTopic()
+        await fetchProductsFromOrderTopic()     // poll orders topic
     } catch (error) {
         console.log(error.message)
     }

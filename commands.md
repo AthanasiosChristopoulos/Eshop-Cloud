@@ -4,8 +4,8 @@ node ./server.js
 Local Kafka:
 .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
 .\bin\windows\kafka-server-start.bat .\config\server.properties
-.\kafka-topics.bat --create --bootstrap-server localhost:9092 --topic ordersProducer
-.\kafka-topics.bat --delete --bootstrap-server localhost:9092 --topic ordersProducer
+.\kafka-topics.bat --create --bootstrap-server localhost:9092 --topic ordersTopic
+.\kafka-topics.bat --delete --bootstrap-server localhost:9092 --topic ordersTopic
 
 =========================================================================================
 

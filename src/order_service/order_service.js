@@ -80,7 +80,7 @@ const addOrder = async (req, res) => {
                 };
 
                 try {
-                    await sendOrders(msg);
+                    await sendOrders(msg);  // this is the beggining of all the kafka logic
                     
                     console.log("VVVVVV sent to Kafka:", msg);
 

@@ -47,11 +47,11 @@ const ensureTopicExists = async (topic) => {    // create + ensure
 };
 
 const sendOrders = async (msg) => {
-    await ensureTopicExists('ordersProducer'); // Ensure the topic exists before sending
+    await ensureTopicExists('ordersTopic'); // Ensure the topic exists before sending
 
     await producer.connect()
     await producer.send({
-        topic: 'ordersProducer',
+        topic: 'ordersTopic',
         messages: [{
             value: JSON.stringify(msg)
         }]
@@ -63,14 +63,14 @@ const sendOrders = async (msg) => {
 // Consumer ========================================================================
 
 const statusConsumer = kafka.consumer({
-    groupId: 'order-status-group', // Group for consuming from productsProducer
+    groupId: 'order-status-group', // Group for consuming from ordersConfirmation
     allowAutoTopicCreation: true,
 });
 
 const listenToOrderStatus = async () => {
     try {
         await statusConsumer.connect();
-        await statusConsumer.subscribe({ topics: ['productsProducer'] });
+        await statusConsumer.subscribe({ topics: ['ordersConfirmation'] });
 
         await statusConsumer.run({
             eachMessage: async ({ message }) => {
@@ -96,7 +96,7 @@ const listenToOrderStatus = async () => {
 
 setTimeout(async () => {
     try {
-        await listenToOrderStatus();
+        await listenToOrderStatus();    // check / poll     whatever you are consuming
     } catch (error) {
         console.log(error.message);
     }

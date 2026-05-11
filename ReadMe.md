@@ -157,4 +157,4 @@ docker logs -f order_service    # to debug the backend services running in docke
 
 ## Kafka =======================================================
 
-There are 2 topics: productsProducer and ordersProducer.
+There are 2 topics: ordersConfirmation and ordersTopic.
