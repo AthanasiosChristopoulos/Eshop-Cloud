@@ -12,6 +12,7 @@ const kafka = new Kafka({
 })
 
 // Producer ========================================================================
+// send order confirmations
 
 const producer = kafka.producer({
     allowAutoTopicCreation: true,
@@ -59,6 +60,7 @@ const sendConfirmation = async (msg) => {
 }
 
 // Consumer ========================================================================
+// check for new orders
 
 const consumer = kafka.consumer({
     groupId: "products-group",

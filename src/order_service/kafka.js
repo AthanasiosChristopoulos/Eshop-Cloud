@@ -12,7 +12,7 @@ const kafka = new Kafka({
 })
 
 // Producer ========================================================================
-
+// send new orders
 const producer = kafka.producer({
     allowAutoTopicCreation: true,
     createPartitioner: Partitioners.LegacyPartitioner
@@ -61,6 +61,7 @@ const sendOrders = async (msg) => {
 }
 
 // Consumer ========================================================================
+// check new confirmations 
 
 const statusConsumer = kafka.consumer({
     groupId: 'order-status-group', // Group for consuming from ordersConfirmation
