@@ -7,7 +7,7 @@ if (decodedToken) {
     const username = decodedToken.username;
     ordersUrl = `http://127.0.0.1:5001/orders/${username}`;
 } else {
-    console.log("No token");
+    redirect_to_login()
 }
 
 // =====================================================================================

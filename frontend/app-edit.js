@@ -8,6 +8,8 @@ if (token) {
     console.log('token of the user: ' + token)
     const decodedToken = JSON.parse(token);
     url = `${BASE_URL}/${decodedToken.username}`;
+} else {
+    redirect_to_login()
 }
 
 const main_modal = document.getElementById("modal");

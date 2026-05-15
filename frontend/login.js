@@ -7,7 +7,7 @@ const REDIRECT_URI = "http://127.0.0.1:5500";
 // Login Redirect
 // =============================
 
-function redirect_to_login() {
+function redirect_to_login() {      // the frontend calls this OAuth2 redirect process to authenticate the user. To do that, it needs redirect to Keycloack service, which in our case acts as the third party authentication service
     const params = new URLSearchParams({
         response_type: "code",  // we need this in URL, so we can get the access code from keycloack
         // this tells keycloack, “When you send the browser back, include an authorization code.”
@@ -18,7 +18,7 @@ function redirect_to_login() {
     window.location.href = `${KEYCLOAK_BASE_URL}/auth?${params.toString()}`;    
         // this is the login page where the user has to enter the username and password
         // Keycloak sends the user back to the frontend with a code (again window.onload will run but this time the user will have the ?code=... parameter).
-        // this is the request that will lead to the ?code=... redirect (this is just a GET request)
+        // this is the request that will lead to the http://127.0.0.1:5500/?code=xyz redirect (this is just a GET request), which will return back to the frontend of the application with a code
 }
 
 // =======================================================================================
